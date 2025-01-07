@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/07 16:23:56 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/07 17:14:18 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ struct s_mlx_data
 	void *mlx;
 	void *window;
 	char *title;
+	void *image;
 } typedef t_mlx_data;
 
 #define FDF_FILE_DELIMITER ' '

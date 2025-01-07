@@ -6,14 +6,14 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/07 16:59:25 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/07 17:33:15 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <fcntl.h>
 
-int try_open_file(int *fd, char *file_path)
+int	try_open_file(int *fd, char *file_path)
 {
 	*fd = open(file_path, O_RDONLY);
 	if (*fd == -1)
@@ -41,9 +41,9 @@ void	free_chartab(char **tab)
 	free(tab);
 }
 
-static int *parse_line(char *line)
+static int	*parse_line(char *line)
 {
-	char 	**words;
+	char	**words;
 	int		*result;
 	size_t	index;
 
@@ -71,10 +71,10 @@ static int *parse_line(char *line)
 
 t_list	*read_file(int fd)
 {
-	t_list 	*current;
+	t_list	*current;
 	t_list	*temp;
 	int		*values;
-	
+
 	current = NULL;
 	values = parse_line(get_next_line(fd));
 	while (values)
@@ -89,5 +89,5 @@ t_list	*read_file(int fd)
 		ft_lstadd_back(&current, temp);
 		values = parse_line(get_next_line(fd));
 	}
-	return current;
+	return (current);
 }
