@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/07 17:33:15 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/08 17:56:23 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ void	free_chartab(char **tab)
 	free(tab);
 }
 
-static int	*parse_line(char *line)
+static t_vector3	*parse_line(char *line, int y)
 {
-	char	**words;
-	int		*result;
-	size_t	index;
+	char		**words;
+	t_vector3	*result;
+	size_t		index;
 
 	if (!line)
 		return (NULL);
 	words = ft_split(line, FDF_FILE_DELIMITER);
 	if (!words)
 		return (free(line), NULL);
-	result = malloc(sizeof(int) * count_words(line, FDF_FILE_DELIMITER));
+	result = ft_calloc(count_words(line, FDF_FILE_DELIMITER) + 1, sizeof(t_vector3));
 	if (!result)
 	{
 		free_chartab(words);
@@ -62,21 +62,24 @@ static int	*parse_line(char *line)
 	index = 0;
 	while (words[index])
 	{
-		result[index] = ft_atoi(words[index]);
+		result[index] = make_vec3(index,y,ft_atoi(words[index]));
 		index++;
 	}
+	result[index] = make_vec3(-1, -1, -1);
 	free_chartab(words);
 	return (free(line), result);
 }
 
 t_list	*read_file(int fd)
 {
-	t_list	*current;
-	t_list	*temp;
-	int		*values;
+	t_list		*current;
+	t_list		*temp;
+	t_vector3	*values;
+	int			y;
 
 	current = NULL;
-	values = parse_line(get_next_line(fd));
+	y = 0;
+	values = parse_line(get_next_line(fd), y);
 	while (values)
 	{
 		temp = ft_lstnew(values);
@@ -87,7 +90,8 @@ t_list	*read_file(int fd)
 			return (NULL);
 		}
 		ft_lstadd_back(&current, temp);
-		values = parse_line(get_next_line(fd));
+		values = parse_line(get_next_line(fd), y);
+		y ++;
 	}
 	return (current);
 }
