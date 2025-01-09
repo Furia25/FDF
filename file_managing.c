@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/09 19:32:32 by val              ###   ########.fr       */
+/*   Updated: 2025/01/09 23:41:07 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_list	*read_file(int fd)
 {
 	t_list		*current;
 	t_list		*temp;
-	t_vect3	*values;
+	t_vect3		*values;
 	float		y;
 
 	ft_printf("\033[1;34mGENERATING WIREFRAME...\033[0m\n");

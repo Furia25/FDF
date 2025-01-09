@@ -45,6 +45,7 @@ int	movement_manager(int keycode, t_fdf_data *data)
 	int			keypressed;
 
 	camera = data->camera;
+	keypressed = 0;
 	if (keycode == XK_z)
 		keypressed = cam_move_forward(camera->spd, camera);
 	if (keycode == XK_s)
@@ -53,12 +54,16 @@ int	movement_manager(int keycode, t_fdf_data *data)
 		keypressed = cam_move_left(-camera->spd, camera);
 	if (keycode == XK_d)
 		keypressed = cam_move_left(camera->spd, camera);
+	if (keycode == XK_Up)
+		keypressed = cam_rotate_up(-camera->sensivity, camera);
+	if (keycode == XK_Down)
+		keypressed = cam_rotate_up(camera->sensivity, camera);
+	if (keycode == XK_Right)
+		keypressed = cam_rotate_left(camera->sensivity, camera);
+	if (keycode == XK_Left)
+		keypressed = cam_rotate_left(-camera->sensivity, camera);
 	if (keypressed)
-	{
-		printf("\033[3;97m	CAM MOVED : %f, %f, %f\033[0m\n", camera->pos.x, camera->pos.y, camera->pos.z);
-		printf("\033[3;97m	CAM DIR : %f, %f, %f\033[0m\n", camera->dir.x, camera->dir.y, camera->dir.z);
-		camera->moved = 1;
-	}
+		cam_update(camera);
 	return (1);
 }
 

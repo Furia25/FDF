@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/09 22:34:45 by val              ###   ########.fr       */
+/*   Updated: 2025/01/10 00:28:07 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@
 void	generate_points(t_list *lst, t_image_data *img, t_fdf_data *data)
 {
 	int		index;
+	int		steps;
 	t_vect3	*array;
-	t_vect3	point;
+	t_vect3	seg_point;
+	t_vect3 point:
 
 	while (lst)
 	{
@@ -39,9 +41,14 @@ void	generate_points(t_list *lst, t_image_data *img, t_fdf_data *data)
 		index = 0;
 		while (array[index].x != -1)
 		{
-			point = project_point_cam(array[index], CAMERA_DEFAULT_FOCAL, data->camera, data);
-			//printf("%f %f \n", point.x, point.y);
-			img_draw_zdistpoint(0xABCDEF, point, img);
+			steps = 0;
+			while (steps < SEGMENT_PRECISION){
+				seg_point = get_interpolate_3d();
+				point = project_point_cam(array[index], CAMERA_DEFAULT_FOCAL, data->camera, data);
+				//printf("%f %f \n", point.x, point.y);
+				img_draw_zdistpoint(0xABCDEF, point, img);
+				steps++;
+			}
 			index++;
 		}
 		lst = lst->next;
