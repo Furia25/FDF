@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/09 18:52:09 by val              ###   ########.fr       */
+/*   Updated: 2025/01/09 22:34:45 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 	}
 } */
 
-void	generate_points(t_list *lst, t_image_data *img, t_mlx_data *data)
+void	generate_points(t_list *lst, t_image_data *img, t_fdf_data *data)
 {
 	int		index;
 	t_vect3	*array;
@@ -39,8 +39,8 @@ void	generate_points(t_list *lst, t_image_data *img, t_mlx_data *data)
 		index = 0;
 		while (array[index].x != -1)
 		{
-			point = project_point_cam(array[index], 2, data);
-			printf("%f %f \n", point.x, point.y);
+			point = project_point_cam(array[index], CAMERA_DEFAULT_FOCAL, data->camera, data);
+			//printf("%f %f \n", point.x, point.y);
 			img_draw_zdistpoint(0xABCDEF, point, img);
 			index++;
 		}
@@ -48,7 +48,7 @@ void	generate_points(t_list *lst, t_image_data *img, t_mlx_data *data)
 	}
 }
 
-void	*generate_wireframe(t_mlx_data *data)
+void	*generate_wireframe(t_fdf_data *data)
 {
 	t_image_data	img;
 
@@ -66,31 +66,49 @@ void	*generate_wireframe(t_mlx_data *data)
 	return (data->image);
 }
 
+int	init_data(t_fdf_data *data, int fd, char *title)
+{
+	data->width = WINDOW_WIDTH;
+	data->height = WINDOW_HEIGHT;
+	data->image = NULL;
+	data->mlx = mlx_init();
+	if (!data->mlx)
+	{
+		free(data);
+		close(fd);
+		exit(EXIT_FAILURE);
+		return(1);
+	}
+	data->title = ft_strjoin("Wireframe - ", title);
+	data->window = mlx_new_window(data->mlx, data->width, data->height, data->title);
+	if (!data->window)
+		return (close_window(data));
+	data->points = read_file(fd);
+	data->camera = init_camera();
+	if (!data->camera)
+		return (close_window(data));
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
-	t_mlx_data	data;
+	t_fdf_data	*data;
 	int			fd;
 
+	data = ft_calloc(1, sizeof(t_fdf_data));
+	if (!data)
+		exit(EXIT_FAILURE);
 	if (argc != 2)
 		return (EXIT_FAILURE);
 	if (!try_open_file(&fd, argv[1]))
 		return (EXIT_FAILURE);
 	if (!check_file(fd))
 		return ((void) close(fd), EXIT_FAILURE);
-	data.height = 1000;
-	data.width = 1000;
-	data.camera = (t_vect3){25, 25, -50};
-	data.camera_dir = normalize((t_vect3){0, 0, -1});
-	data.image = NULL;
-	data.mlx = mlx_init();
-	data.title = ft_strjoin("Wireframe - ", argv[1]);
-	ft_printf("\033[1;34mGENERATING WIREFRAME...\033[0m\n");
-	data.points = read_file(fd);
-	ft_printf("\033[1;92mWIREFRAME GENERATED!\033[0m\n");
-	data.window = mlx_new_window(data.mlx, data.width, data.height, data.title);
-	data.camera_moved = 1;
-	start_managers(&data);
-	mlx_loop(data.mlx);
+	init_data(data, fd, argv[1]);
+	data->camera->moved = 1;
+	start_managers(data);
+	mlx_loop(data->mlx);
 	return (EXIT_SUCCESS);
 }
+
 //cc *.c -Lminilibx-linux -lmlx -lXext -lm -lX11 -Iminilibx-linux -Llibft -lft

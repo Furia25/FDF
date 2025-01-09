@@ -5,8 +5,8 @@
 /*+:+ +:+ +:+ */
 /*   By: val <val@student.42.fr>+#+  +:+   +#+*/
 /*+#+#+#+#+#+   +#+   */
-/*   Created: 2025/01/08 17:17:45 by vdurand   #+##+# */
-/*   Updated: 2025/01/09 18:10:13 by val  ###   ########.fr   */
+/*   Created: 2025/01/09 20:27:01 by val   #+##+# */
+/*   Updated: 2025/01/09 21:48:06 by val  ###   ########.fr   */
 /**/
 /* ************************************************************************** */
 
@@ -23,22 +23,25 @@ t_vect3	get_interpolate_3d(t_vect3 p1, t_vect3 p2, float t)
 	return (result);
 }
 
-t_vect3	project_point_cam(t_vect3 point, float focalLength, t_mlx_data *data)
+t_vect3	project_point_cam(t_vect3 p, float f, t_camera *cam, t_fdf_data *data)
 {
-	t_vect3		projected_point;
-	t_vect3		vector_to_point;
-	float		distance;
+	t_vect3	p_camera;
+	t_vect3	p_oncam;
+	t_vect3	projected;
+	float 	fov_scale;
 
-	vector_to_point.x = point.x - data->camera.x;
-	vector_to_point.y = point.y - data->camera.y;
-	vector_to_point.z = point.z - data->camera.z;
-	distance = dot_product(vector_to_point, data->camera_dir);
-	projected_point.x = (point.x * focalLength) / distance;
-	projected_point.y = (point.y * focalLength) / distance;
-	projected_point.x = (projected_point.x + 1) * data->width / 2;
-	projected_point.y = (projected_point.y + 1) * data->height / 2;
-	projected_point.z = distance;
-	return (projected_point);
+	p_camera = subtract(p, cam->pos);
+	p_oncam.x = dot_product(p_camera, cam->right);
+	p_oncam.y = dot_product(p_camera, cam->up);
+	p_oncam.z = dot_product(p_camera, cam->dir);
+	if (p_oncam.z <= 0.01f)
+		return ((t_vect3){-1, -1, -1});
+	fov_scale = 1.0f / tan(f / 2.0f);
+	projected.x = (p_oncam.x / p_oncam.z) * fov_scale * \
+		data->width / data->height * (data->width / 2) + (data->width / 2);
+	projected.y = (p_oncam.y / p_oncam.z) * fov_scale * (data->height / 2) \
+		+ (data->height / 2);
+	return (projected);
 }
 
 t_vect3	normalize(t_vect3 v)

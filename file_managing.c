@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/09 18:44:36 by val              ###   ########.fr       */
+/*   Updated: 2025/01/09 19:32:32 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ t_list	*read_file(int fd)
 	t_vect3	*values;
 	float		y;
 
+	ft_printf("\033[1;34mGENERATING WIREFRAME...\033[0m\n");
 	current = NULL;
 	y = 0;
 	values = parse_line(get_next_line(fd), y);
@@ -93,5 +94,6 @@ t_list	*read_file(int fd)
 		values = parse_line(get_next_line(fd), y);
 		y ++;
 	}
+	ft_printf("\033[1;92mWIREFRAME GENERATED!\033[0m\n");
 	return (current);
 }

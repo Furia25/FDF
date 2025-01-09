@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/09 19:01:01 by val              ###   ########.fr       */
+/*   Updated: 2025/01/09 23:01:08 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	img_set_pixel(int color, t_vect2 coord, t_image_data *img)
 {
 	int	pixel;
 
-	pixel = ((int) coord.y * img->size_line) + ((int) coord.x * 4);
 	if (coord.x < 0 || coord.x > img->width)
 		return ;
 	if (coord.y < 0 || coord.y > img->height)
 		return ;
+	pixel = ((int) coord.y * img->size_line) + ((int) coord.x * 4);
 	if (img->pbits != 32)
 		color = mlx_get_color_value(img->connection, color);
 	if (img->endian == 1)
@@ -71,9 +71,7 @@ void	img_draw_disk(int color, t_vect2 cord, int radius, t_image_data *img)
 		while (dx <= radius)
 		{
 			if (dx * dx + dy * dy <= radius * radius)
-			{
 				img_set_pixel(color, (t_vect2){cord.x + dx, cord.y + dy}, img);
-			}
 			dx++;
 		}
 		dy++;
@@ -101,7 +99,7 @@ void	img_draw_zdistpoint(int color, t_vect3 point, t_image_data *img)
 {
 	float	point_size;
 
-	if (point.z <= 0)
+	if (point.z <= 0 || point.x <= 0 ||  point.y <= 0)
 		return ;
 	point_size = PERSPECTIVE_FACTOR / point.z;
 	img_draw_disk(color, (t_vect2){point.x, point.y}, point_size, img);
