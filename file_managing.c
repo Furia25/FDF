@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_managing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/08 17:56:23 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/09 18:44:36 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ void	free_chartab(char **tab)
 	free(tab);
 }
 
-static t_vector3	*parse_line(char *line, int y)
+static t_vect3	*parse_line(char *line, int y)
 {
 	char		**words;
-	t_vector3	*result;
+	t_vect3	*result;
 	size_t		index;
 
 	if (!line)
@@ -52,7 +52,7 @@ static t_vector3	*parse_line(char *line, int y)
 	words = ft_split(line, FDF_FILE_DELIMITER);
 	if (!words)
 		return (free(line), NULL);
-	result = ft_calloc(count_words(line, FDF_FILE_DELIMITER) + 1, sizeof(t_vector3));
+	result = ft_calloc(count_words(line, FDF_FILE_DELIMITER) + 1, sizeof(t_vect3));
 	if (!result)
 	{
 		free_chartab(words);
@@ -62,10 +62,10 @@ static t_vector3	*parse_line(char *line, int y)
 	index = 0;
 	while (words[index])
 	{
-		result[index] = make_vec3(index,y,ft_atoi(words[index]));
+		result[index] = (t_vect3){index,y,(float) ft_atoi(words[index])};
 		index++;
 	}
-	result[index] = make_vec3(-1, -1, -1);
+	result[index] = (t_vect3){-1, -1, -1};
 	free_chartab(words);
 	return (free(line), result);
 }
@@ -74,8 +74,8 @@ t_list	*read_file(int fd)
 {
 	t_list		*current;
 	t_list		*temp;
-	t_vector3	*values;
-	int			y;
+	t_vect3	*values;
+	float		y;
 
 	current = NULL;
 	y = 0;

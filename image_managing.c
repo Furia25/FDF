@@ -3,21 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   image_managing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/08 17:17:51 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/09 19:01:01 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <math.h>
 
-void	img_set_pixel(int color, t_vector2 coord, t_image_data *img)
+void	img_set_pixel(int color, t_vect2 coord, t_image_data *img)
 {
 	int	pixel;
 
-	pixel = GET_PIXEL(coord.x, coord.y, img->size_line);
-	if(img->pbits != 32)
+	pixel = ((int) coord.y * img->size_line) + ((int) coord.x * 4);
+	if (coord.x < 0 || coord.x > img->width)
+		return ;
+	if (coord.y < 0 || coord.y > img->height)
+		return ;
+	if (img->pbits != 32)
 		color = mlx_get_color_value(img->connection, color);
 	if (img->endian == 1)
 	{
@@ -35,10 +40,10 @@ void	img_set_pixel(int color, t_vector2 coord, t_image_data *img)
 	}
 }
 
-void	img_set_rectangle(int color, t_vector2 coord, t_vector2 size, t_image_data *img)
+void	img_set_rect(int color, t_vect2 co, t_vect2 size, t_image_data *img)
 {
 	unsigned int	i;
-	unsigned int 	y;
+	unsigned int	y;
 
 	i = 0;
 	y = 0;
@@ -47,9 +52,57 @@ void	img_set_rectangle(int color, t_vector2 coord, t_vector2 size, t_image_data 
 		y = 0;
 		while (y < (unsigned int) size.y)
 		{
-			img_set_pixel(color,make_vec2(coord.x + i, coord.y + y), img);
+			img_set_pixel(color, (t_vect2){co.x + i, co.y + y}, img);
 			y++;
 		}
 		i++;
 	}
+}
+
+void	img_draw_disk(int color, t_vect2 cord, int radius, t_image_data *img)
+{
+	int	dx;
+	int	dy;
+
+	dy = -radius;
+	while (dy <= radius)
+	{
+		dx = -radius;
+		while (dx <= radius)
+		{
+			if (dx * dx + dy * dy <= radius * radius)
+			{
+				img_set_pixel(color, (t_vect2){cord.x + dx, cord.y + dy}, img);
+			}
+			dx++;
+		}
+		dy++;
+	}
+}
+
+void	img_draw_circle(int color, t_vect2 coord, int radius, t_image_data *img)
+{
+	float		angle;
+	t_vect2		xy;
+	int			index;
+
+	index = 0;
+	while (index < CIRCLE_PRECISION)
+	{
+		angle = 2 * M_PI * index / CIRCLE_PRECISION;
+		xy.x = coord.x + radius * cos(angle);
+		xy.y = coord.y + radius * sin(angle);
+		img_set_pixel(color, xy, img);
+		index++;
+	}
+}
+
+void	img_draw_zdistpoint(int color, t_vect3 point, t_image_data *img)
+{
+	float	point_size;
+
+	if (point.z <= 0)
+		return ;
+	point_size = PERSPECTIVE_FACTOR / point.z;
+	img_draw_disk(color, (t_vect2){point.x, point.y}, point_size, img);
 }

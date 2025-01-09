@@ -3,31 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/08 17:17:45 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/08 17:18:33 by vdurand          ###   ########.fr       */
+/*   Created: 2025/01/09 14:55:12 by val               #+#    #+#             */
+/*   Updated: 2025/01/09 19:19:55 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_vector2	make_vec2(int x, int y)
+t_camera	init_camera(void)
 {
-	t_vector2	result;
-	
-	result.x = x;
-	result.y = y;
-	return (result);
-}
+	t_camera	camera;
 
-t_vector3	make_vec3(int x, int y, int z)
-{
-	t_vector3	result;
-	
-	result.x = x;
-	result.y = y;
-	result.z = z;
-	return (result);
+	camera.up = 
 }
-
