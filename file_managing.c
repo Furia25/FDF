@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/09 23:41:07 by val              ###   ########.fr       */
+/*   Updated: 2025/01/10 13:50:48 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static t_vect3	*parse_line(char *line, int y)
 	index = 0;
 	while (words[index])
 	{
-		result[index] = (t_vect3){index,y,(float) ft_atoi(words[index])};
+		result[index] = (t_vect3){index,y,(float) ft_atoi(words[index]) / 3};
 		index++;
 	}
 	result[index] = (t_vect3){-1, -1, -1};

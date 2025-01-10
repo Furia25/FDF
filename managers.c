@@ -41,8 +41,8 @@ int	close_window(t_fdf_data *data)
 
 int	movement_manager(int keycode, t_fdf_data *data)
 {
-	t_camera	*camera;
-	int			keypressed;
+	t_camera		*camera;
+	int				keypressed;
 
 	camera = data->camera;
 	keypressed = 0;
@@ -54,14 +54,18 @@ int	movement_manager(int keycode, t_fdf_data *data)
 		keypressed = cam_move_left(-camera->spd, camera);
 	if (keycode == XK_d)
 		keypressed = cam_move_left(camera->spd, camera);
+	if (keycode == XK_space)
+		keypressed = cam_move_up(-camera->spd, camera);
+	if (keycode == XK_Shift_L)
+		keypressed = cam_move_up(camera->spd, camera);
 	if (keycode == XK_Up)
-		keypressed = cam_rotate_up(-camera->sensivity, camera);
+		keypressed = cam_rotate(camera, CAMERA_DEFAULT_SENSITIVITY, 0);
 	if (keycode == XK_Down)
-		keypressed = cam_rotate_up(camera->sensivity, camera);
+		keypressed = cam_rotate(camera, -CAMERA_DEFAULT_SENSITIVITY, 0);
 	if (keycode == XK_Right)
-		keypressed = cam_rotate_left(camera->sensivity, camera);
+		keypressed = cam_rotate(camera, 0, -CAMERA_DEFAULT_SENSITIVITY);
 	if (keycode == XK_Left)
-		keypressed = cam_rotate_left(-camera->sensivity, camera);
+		keypressed = cam_rotate(camera, 0, CAMERA_DEFAULT_SENSITIVITY);
 	if (keypressed)
 		cam_update(camera);
 	return (1);

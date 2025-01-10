@@ -6,22 +6,22 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/10 00:17:16 by val              ###   ########.fr       */
+/*   Updated: 2025/01/10 03:05:46 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <math.h>
 
-void	img_set_pixel(int color, t_vect2 coord, t_image_data *img)
+void	img_set_pixel(t_argb rgb, t_vect2 co, t_image_data *img)
 {
 	int	pixel;
+	int	color;
 
-	if (coord.x < 0 || coord.x > img->width)
+	if (co.x < 0 || co.x > img->width || co.y < 0 || co.y > img->height)
 		return ;
-	if (coord.y < 0 || coord.y > img->height)
-		return ;
-	pixel = ((int) coord.y * img->size_line) + ((int) coord.x * 4);
+	pixel = ((int) co.y * img->size_line) + ((int) co.x * 4);
+	color = argb_to_int(rgb);
 	if (img->pbits != 32)
 		color = mlx_get_color_value(img->connection, color);
 	if (img->endian == 1)
@@ -40,7 +40,7 @@ void	img_set_pixel(int color, t_vect2 coord, t_image_data *img)
 	}
 }
 
-void	img_set_rect(int color, t_vect2 co, t_vect2 size, t_image_data *img)
+void	img_set_rect(t_argb color, t_vect2 co, t_vect2 size, t_image_data *img)
 {
 	unsigned int	i;
 	unsigned int	y;
@@ -59,7 +59,7 @@ void	img_set_rect(int color, t_vect2 co, t_vect2 size, t_image_data *img)
 	}
 }
 
-void	img_draw_disk(int color, t_vect2 cord, int radius, t_image_data *img)
+void	img_draw_disk(t_argb color, t_vect2 cord, int radius, t_image_data *img)
 {
 	int	dx;
 	int	dy;
@@ -78,7 +78,7 @@ void	img_draw_disk(int color, t_vect2 cord, int radius, t_image_data *img)
 	}
 }
 
-void	img_draw_circle(int color, t_vect2 coord, int radius, t_image_data *img)
+void	img_draw_circle(t_argb color, t_vect2 coord, int radius, t_image_data *img)
 {
 	float		angle;
 	t_vect2		xy;
@@ -95,12 +95,13 @@ void	img_draw_circle(int color, t_vect2 coord, int radius, t_image_data *img)
 	}
 }
 
-void	img_draw_zdistpoint(int color, t_vect3 point, t_image_data *img)
+void	img_draw_zdistpoint(t_argb color, t_vect3 point, float z, t_image_data *img)
 {
 	float	point_size;
 
 	if (point.z <= 0 || point.x <= 0 ||  point.y <= 0)
 		return ;
 	point_size = PERSPECTIVE_FACTOR / point.z;
+	color = hsv_to_argb((t_hsv){(int) (z * 10) % 360, 255, 255});
 	img_draw_disk(color, (t_vect2){point.x, point.y}, point_size, img);
 }

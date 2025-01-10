@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/10 00:28:07 by val              ###   ########.fr       */
+/*   Updated: 2025/01/10 18:23:04 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,29 @@
 	}
 } */
 
-void	generate_points(t_list *lst, t_image_data *img, t_fdf_data *data)
+void	generate_points(t_list *lst, t_image_data *img)
 {
 	int		index;
-	int		steps;
 	t_vect3	*array;
-	t_vect3	seg_point;
-	t_vect3 point:
+	t_vect3	*temp;
+	t_argb 	color;
 
 	while (lst)
 	{
 		array = (t_vect3 *) lst->content;
-		index = 0;
-		while (array[index].x != -1)
+		index = -1;
+		while (array[++index].x != -1)
 		{
-			steps = 0;
-			while (steps < SEGMENT_PRECISION){
-				seg_point = get_interpolate_3d();
-				point = project_point_cam(array[index], CAMERA_DEFAULT_FOCAL, data->camera, data);
-				//printf("%f %f \n", point.x, point.y);
-				img_draw_zdistpoint(0xABCDEF, point, img);
-				steps++;
+			if (!is_point_in_cameradir(img->data->camera, array[index], img->data->camera->fov))
+				continue;
+			color = (t_argb){0, 0, 0, 0};
+			if (array[index + 1].x != -1)
+				img_draw_segment(color, array[index], array[index + 1], img);
+			if (lst->next)
+			{
+				temp = (t_vect3 *) lst->next->content;
+				img_draw_segment(color, array[index], temp[index], img);
 			}
-			index++;
 		}
 		lst = lst->next;
 	}
@@ -59,6 +59,7 @@ void	*generate_wireframe(t_fdf_data *data)
 {
 	t_image_data	img;
 
+	img.data = data;
 	img.height = data->height;
 	img.width = data->width;
 	img.connection = data->mlx;
@@ -69,7 +70,7 @@ void	*generate_wireframe(t_fdf_data *data)
 			&img.size_line, &img.endian);
 	if (!img.buffer)
 		return (NULL);
-	generate_points(data->points, &img, data);
+	generate_points(data->points, &img);
 	return (data->image);
 }
 
@@ -114,6 +115,11 @@ int	main(int argc, char **argv)
 	init_data(data, fd, argv[1]);
 	data->camera->moved = 1;
 	start_managers(data);
+	t_quaternion q_90_z = quaternion_from_axis_angle((t_vect3){0, 0, 1}, 90);
+	printf("Quaternion: %f %f %f %f\n", q_90_z.w, q_90_z.x, q_90_z.y, q_90_z.z);
+
+	t_vect3 v_rotated = vec3_rotate(q_90_z, (t_vect3){1, 0, 0});
+	printf("Rotated Vector: %f %f %f\n", v_rotated.x, v_rotated.y, v_rotated.z);
 	mlx_loop(data->mlx);
 	return (EXIT_SUCCESS);
 }

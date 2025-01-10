@@ -48,25 +48,40 @@ t_vect3	project_point_cam(t_vect3 p, float f, t_camera *cam, t_fdf_data *data)
 	return (projected);
 }
 
-t_vect3	normalize(t_vect3 v)
-{
-	float	length;
-
-	length = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (length > 0)
-	{
-		v.x /= length;
-		v.y /= length;
-		v.z /= length;
-	}
-	return (v);
-}
-
 float	normalize_angle(float angle)
 {
 	while (angle >= 360.0f)
-		angle -= 360.0f;
+		angle = 0.0f;
 	while (angle < 0.0f)
-		angle += 360.0f;
+		angle = 360.0f;
 	return (angle);
+}
+
+int	is_point_in_cameradir(t_camera *cam, t_vect3 point, float fov)
+{
+	float fov_cos;
+	float dot;
+	t_vect3 to_point;
+
+	fov_cos = cosf((fov * 0.5f) * (M_PI / 180.0f));
+	to_point = subtract(point, cam->pos);
+	dot = dot_product(cam->dir, to_point);
+	return (dot * dot > fov_cos * fov_cos * dot_product(to_point, to_point));
+}
+
+float	fast_sqrt(float number)
+{
+    int32_t i;
+    float	x2;
+	float	y;
+
+	if (number <= 0)
+		return 0;
+    x2 = number * 0.5f;
+    y = number;
+    i = *(int32_t *)&y;
+    i = 0x5f3759df - (i >> 1);
+    y = *(float *)&i;
+    y = y * (TREEHALFS - (x2 * y * y));
+    return 1.0f / y;
 }
