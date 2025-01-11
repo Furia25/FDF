@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 02:24:10 by val               #+#    #+#             */
-/*   Updated: 2025/01/10 12:57:06 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 17:34:02 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	argb_to_int(t_argb argb)
     return (hsv);
 } */
 
-t_argb hsv_to_argb(t_hsv hsv)
+t_argb	hsv_to_argb(t_hsv hsv)
 {
 	t_argb	rgb;
 	t_vect3 cxm;

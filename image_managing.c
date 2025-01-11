@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/10 03:05:46 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 18:24:52 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ void	img_draw_circle(t_argb color, t_vect2 coord, int radius, t_image_data *img)
 	}
 }
 
-void	img_draw_zdistpoint(t_argb color, t_vect3 point, float z, t_image_data *img)
+void	img_draw_point(t_argb color, t_vect4 point, float z, t_image_data *img)
 {
 	float	point_size;
 
 	if (point.z <= 0 || point.x <= 0 ||  point.y <= 0)
 		return ;
-	point_size = PERSPECTIVE_FACTOR / point.z;
+	point_size = PERSPECTIVE_FACTOR * (1 /point.w);
 	color = hsv_to_argb((t_hsv){(int) (z * 10) % 360, 255, 255});
 	img_draw_disk(color, (t_vect2){point.x, point.y}, point_size, img);
 }

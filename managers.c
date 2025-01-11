@@ -59,9 +59,9 @@ int	movement_manager(int keycode, t_fdf_data *data)
 	if (keycode == XK_Shift_L)
 		keypressed = cam_move_up(camera->spd, camera);
 	if (keycode == XK_Up)
-		keypressed = cam_rotate(camera, CAMERA_DEFAULT_SENSITIVITY, 0);
-	if (keycode == XK_Down)
 		keypressed = cam_rotate(camera, -CAMERA_DEFAULT_SENSITIVITY, 0);
+	if (keycode == XK_Down)
+		keypressed = cam_rotate(camera, CAMERA_DEFAULT_SENSITIVITY, 0);
 	if (keycode == XK_Right)
 		keypressed = cam_rotate(camera, 0, -CAMERA_DEFAULT_SENSITIVITY);
 	if (keycode == XK_Left)

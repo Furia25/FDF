@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 01:06:36 by val               #+#    #+#             */
-/*   Updated: 2025/01/10 18:21:52 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 16:20:31 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,9 @@ t_vect3	vec3_rotate(t_quaternion q, t_vect3 v)
 			), \
 		quaternion_conjugate(q));
 	return ((t_vect3){q_result.x, q_result.y, q_result.z});
+}
+
+t_vect4	vec3_to_homogeneous(t_vect3 v)
+{
+    return ((t_vect4){v.x, v.y, v.z, 1.0f});
 }

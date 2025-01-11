@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 00:26:44 by val               #+#    #+#             */
-/*   Updated: 2025/01/10 13:21:36 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 16:47:47 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ void	img_draw_segment(t_argb color, t_vect3 a, t_vect3 b, t_image_data *img)
 	while (index < steps)
 	{
 		interpolated = add(a, scale(diff, (float)index / (steps - 1)));
-		img_draw_zdistpoint(color, \
-			project_point_cam(interpolated, img->data->camera->fov, \
-				img->data->camera, img->data), \
+		img_draw_point(color, \
+			project_point_cam(interpolated, img->data->camera), \
 			interpolated.z, \
 			img);
 		index++;

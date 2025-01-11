@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:39:40 by val               #+#    #+#             */
-/*   Updated: 2025/01/10 18:21:30 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 16:02:57 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ t_quaternion    quaternion_normalize(t_quaternion q)
     length = sqrtf(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
     if (length > 0.0f) {
         inv_length = 1.0f / length;
+        q.w *= inv_length;
         q.x *= inv_length;
         q.y *= inv_length;
         q.z *= inv_length;
-        q.w *= inv_length;
     }
     return (q);
 }
@@ -50,7 +50,7 @@ t_quaternion	quaternion_from_axis_angle(t_vect3 axis, float angle)
 	float   s;
     float   half_angle;
 
-    half_angle = (angle * (M_PI / 180.0f)) / 2.0f;
+    half_angle = (angle * M_PI / 180.0f) / 2.0f;
 	s = sin(half_angle);
 	return (quaternion_normalize((t_quaternion)
 	{

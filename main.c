@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/10 18:23:04 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 16:52:15 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	generate_points(t_list *lst, t_image_data *img)
 		index = -1;
 		while (array[++index].x != -1)
 		{
-			if (!is_point_in_cameradir(img->data->camera, array[index], img->data->camera->fov))
-				continue;
+			//if (!is_point_in_cameradir(img->data->camera, array[index], img->data->camera->fov))
+				//continue;
 			color = (t_argb){0, 0, 0, 0};
 			if (array[index + 1].x != -1)
 				img_draw_segment(color, array[index], array[index + 1], img);
@@ -92,7 +92,7 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 	if (!data->window)
 		return (close_window(data));
 	data->points = read_file(fd);
-	data->camera = init_camera();
+	data->camera = init_camera(data->width, data->height);
 	if (!data->camera)
 		return (close_window(data));
 	return (1);
@@ -115,11 +115,6 @@ int	main(int argc, char **argv)
 	init_data(data, fd, argv[1]);
 	data->camera->moved = 1;
 	start_managers(data);
-	t_quaternion q_90_z = quaternion_from_axis_angle((t_vect3){0, 0, 1}, 90);
-	printf("Quaternion: %f %f %f %f\n", q_90_z.w, q_90_z.x, q_90_z.y, q_90_z.z);
-
-	t_vect3 v_rotated = vec3_rotate(q_90_z, (t_vect3){1, 0, 0});
-	printf("Rotated Vector: %f %f %f\n", v_rotated.x, v_rotated.y, v_rotated.z);
 	mlx_loop(data->mlx);
 	return (EXIT_SUCCESS);
 }
