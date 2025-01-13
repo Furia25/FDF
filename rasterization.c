@@ -106,7 +106,7 @@ int	frustum(t_triangle2 tri, t_fdf_data *data)
 	score += (tri.a.x < min || tri.a.x >= width || tri.a.y < min || tri.a.y >= height);
 	score += (tri.b.x < min || tri.b.x >= width || tri.b.y < min || tri.b.y >= height);
 	score += (tri.c.x < min || tri.c.x >= width || tri.c.y < min || tri.c.y >= height);
-	return (score > 1);
+	return (score > 2);
 }
 
 void	img_rasterize_triangle(t_triangle2 tri, t_argb c, t_fdf_data *data)

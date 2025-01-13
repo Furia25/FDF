@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:53:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 19:17:54 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/13 19:36:12 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	key_manager(int lastkey, t_fdf_data *data)
 		return (close_window(data), 1);
 	if (lastkey != -1)
 	{
-		movement_keys(lastkey, data);
+		if (!movement_keys(lastkey, data))
+			data->camera->spd = CAMERA_DEFAULT_SPEED;
 		camera_keys(lastkey, data);
 	}
 	return (1);
@@ -47,6 +48,8 @@ int	movement_keys(int keycode, t_fdf_data *data)
 	int				keypressed;
 
 	camera = data->camera;
+	camera->spd += CAMERA_DEFAULT_SPEED / 100;
+	camera->spd = fmin(camera->spd, CAMERA_DEFAULT_SENSITIVITY * 2);
 	keypressed = 0;
 	if (keycode == XK_w)
 		keypressed = cam_move_forward(camera->spd, camera);

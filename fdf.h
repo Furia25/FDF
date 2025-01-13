@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 19:29:54 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/13 19:49:59 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,19 +143,19 @@ typedef struct s_fdf_data
 # define M_PI 3.14159265358979323846
 /*	Windows and files Constants	*/
 # define FDF_FILE_DELIMITER	' '
-# define WINDOW_HEIGHT	1000
-# define WINDOW_WIDTH	1000
+# define WINDOW_HEIGHT	800
+# define WINDOW_WIDTH	800
 /*	Drawing Constants	*/
 # define CIRCLE_PRECISION 100
 # define PERSPECTIVE_FACTOR	80.0f
 # define SEGMENT_PRECISION 200
 # define SEGMENT_MAXDISTANCE 100
 /*	Camera defaults	*/
-# define FRUSTUM_CULLING_PRECISION	60
+# define FRUSTUM_CULLING_PRECISION	50
 # define CAMERA_DEFAULT_FOCAL 100
 # define CAMERA_DEFAULT_X	10
 # define CAMERA_DEFAULT_Y	0
-# define CAMERA_DEFAULT_Z	50 
+# define CAMERA_DEFAULT_Z	50
 # define CAMERA_DEFAULT_SPEED	0.33
 # define CAMERA_DEFAULT_SENSITIVITY 2
 

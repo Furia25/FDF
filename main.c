@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 19:15:43 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/13 19:37:19 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 	data->camera = init_camera(data->width, data->height);
 	if (!data->camera)
 		return (close_window(data));
-	ft_memset(&data->lastkey, -1, 6 * sizeof(int));
 	return (1);
 }
 
