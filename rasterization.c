@@ -92,6 +92,23 @@ t_vect2	interpolate_zw(float x, float y, t_triangle2 triangle)
 	return (result);
 }
 
+int	frustum(t_triangle2 tri, t_fdf_data *data)
+{
+	int score;
+	int	width;
+	int	height;
+	int	min;
+
+	min = 0 - FRUSTUM_CULLING_PRECISION;
+	width = data->width + FRUSTUM_CULLING_PRECISION;
+	height = data->height + FRUSTUM_CULLING_PRECISION;
+	score = 0;
+	score += (tri.a.x < min || tri.a.x >= width || tri.a.y < min || tri.a.y >= height);
+	score += (tri.b.x < min || tri.b.x >= width || tri.b.y < min || tri.b.y >= height);
+	score += (tri.c.x < min || tri.c.x >= width || tri.c.y < min || tri.c.y >= height);
+	return (score > 1);
+}
+
 void	img_rasterize_triangle(t_triangle2 tri, t_argb c, t_fdf_data *data)
 {
 	t_vect2	zw;
@@ -99,7 +116,7 @@ void	img_rasterize_triangle(t_triangle2 tri, t_argb c, t_fdf_data *data)
 	int		x;
 	t_bbox	box;
 
-	if (tri.a.w <= -1 || tri.b.w <= -1 || tri.b.w <= -1)
+	if (tri.a.w <= -1 || tri.b.w <= -1 || tri.c.w <= -1 || frustum(tri, data))
 		return ;
 	sort_vertices_by_y(&tri.a, &tri.b, &tri.c);
 	box = get_bounding_box(tri);

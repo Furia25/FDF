@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   image_managing2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 00:26:44 by val               #+#    #+#             */
-/*   Updated: 2025/01/12 16:18:02 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 19:29:20 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <math.h>
 
-void	img_set_segment(t_argb color, t_vect3 a, t_vect3 b, t_fdf_data *data)
+void	img_set_bsegment(t_argb color, t_vect3 a, t_vect3 b, t_fdf_data *data)
 {
 	int		steps;
 	int		index;

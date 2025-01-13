@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   projection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:21:39 by val               #+#    #+#             */
-/*   Updated: 2025/01/11 18:23:29 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 19:13:03 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,11 @@ t_matrix4	get_perspective_matrix(float f, float aspect, float near, float far)
 		}
 		i++;
 	}
-	tan_half_fov = tanf(f / 2.0f);
+	printf("%f", aspect);
+	tan_half_fov = tanf(f * 0.5f);
 	mat.m[0][0] = 1.0f / (aspect * tan_half_fov);
 	mat.m[1][1] = 1.0f / tan_half_fov;
-	mat.m[2][2] = (far + near) / (near - far);
+	mat.m[2][2] = -((far + near) / (far - near));
 	mat.m[2][3] = (2.0f * far * near) / (near - far);
 	mat.m[3][2] = -1.0f;
 	return (mat);
@@ -111,6 +112,7 @@ t_vect4	project_point_cam(t_vect3 p, t_camera *cam)
 {
 	t_vect4	point;
 	t_vect4	projected;
+	float	r;
 
 	point = vec3_to_homogeneous(p);
 	projected = vec4_multiply_matrix4(cam->m_final, point);
@@ -122,10 +124,8 @@ t_vect4	project_point_cam(t_vect3 p, t_camera *cam)
 	}
 	if (projected.w < 0)
 		return ((t_vect4){-1, -1, -1, -1});
-	projected.x = (int)((-projected.x + 1.0f) * cam->width / 2);
-	projected.y = (int)((-projected.y + 1.0f) * cam->height / 2);
-	if (projected.x < 0 || projected.x > cam->width \
-		|| projected.y < 0 || projected.y > cam->height)
-		return ((t_vect4){-1, -1, -1, -1});
+	r = cam->width / cam->height;
+	projected.x = (int)((-projected.x + 1.0f) * cam->width * 0.5);
+	projected.y = (int)((-projected.y + 1.0f) * cam->height * 0.5);
 	return (projected);
 }

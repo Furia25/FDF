@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cam_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:06:43 by val               #+#    #+#             */
-/*   Updated: 2025/01/11 19:56:35 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 19:20:47 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	cam_rotate(t_camera *camera, float yaw, float pitch, float roll)
 	combined_q = quaternion_multiply(combined_q, roll_q);
 	camera->dir = vec3_rotate(combined_q, camera->dir);
 	camera->dir = normalize(camera->dir);
-	camera->right = cross_product(camera->dir, CAMERA_DEFAULT_UP);
+	camera->right = cross_product(camera->dir, (t_vect3){0, 1, 0});
     camera->right = normalize(camera->right);
 	camera->up = cross_product(camera->right, camera->dir);
     camera->up = normalize(camera->up);
@@ -41,16 +41,20 @@ t_camera	*init_camera(float wwindow, float hwindow)
 	camera = ft_calloc(1, sizeof(t_camera));
 	if (!camera)
 		return (NULL);
-	camera->pos = CAMERA_DEFAULT_POSITION;
-	camera->dir = CAMERA_DEFAULT_DIR;
+	camera->pos = (t_vect3){
+		CAMERA_DEFAULT_X,
+		CAMERA_DEFAULT_Y,
+		CAMERA_DEFAULT_Z
+	};
+	camera->dir = (t_vect3){0, 0, -1};
 	camera->width = wwindow;
 	camera->height = hwindow;
-	camera->right = cross_product(camera->dir, CAMERA_DEFAULT_UP);
+	camera->right = cross_product(camera->dir, (t_vect3){0, 1, 0});
 	camera->right = normalize(camera->right);
 	camera->up = cross_product(camera->right, camera->dir);
     camera->up = normalize(camera->up);
 	camera->fov = CAMERA_DEFAULT_FOCAL;
-	camera->m_perspective = get_perspective_matrix(camera->fov, camera->width / camera->height, 0.1f, 100.0f);
+	camera->m_perspective = get_perspective_matrix(camera->fov, wwindow / hwindow, 0.1f, 100.0f);
 	cam_update(camera);
 	camera->spd = CAMERA_DEFAULT_SPEED;
 	camera->sensivity = CAMERA_DEFAULT_SENSITIVITY;

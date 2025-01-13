@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_managing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/12 15:39:54 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 15:54:38 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_vect3	*parse_line(char *line, int y)
 	index = 0;
 	while (words[index])
 	{
-		result[index] = (t_vect3){(float)y, -(((float) ft_atoi(words[index])) / 5), -index};
+		result[index] = (t_vect3){(float)y, -(((float) ft_atoi(words[index])) / 2), -index};
 		index++;
 	}
 	result[index] = (t_vect3){-1, -1, -1};

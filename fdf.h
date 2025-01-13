@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 03:54:57 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 19:29:54 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ typedef struct s_vector4
 
 typedef struct s_matrix4
 {
-    float m[4][4];
+	float	m[4][4];
 }	t_matrix4;
 
-typedef	struct s_quaternion
+typedef struct s_quaternion
 {
 	float	w;
 	float	x;
@@ -66,8 +66,8 @@ typedef struct s_argb
 typedef struct s_hsv
 {
 	int	h;
-	int s;
-	int v;
+	int	s;
+	int	v;
 }	t_hsv;
 
 typedef struct s_triangle3
@@ -84,8 +84,9 @@ typedef struct s_triangle2
 	t_vect4	c;
 }	t_triangle2;
 
-typedef struct s_bbox{
-    int	x_min;
+typedef struct s_bbox
+{
+	int	x_min;
 	int	x_max;
 	int	y_min;
 	int	y_max;
@@ -101,8 +102,8 @@ typedef struct s_camera
 	t_vect3			up;
 	t_vect3			right;
 	int				moved;
-	int				width;
-	int				height;
+	float			width;
+	float			height;
 	float			spd;
 	float			sensivity;
 	float			fov;
@@ -111,8 +112,8 @@ typedef struct s_camera
 typedef struct s_image_data
 {
 	void		*connection;
-	int			height;
-	int			width;
+	float		height;
+	float		width;
 	int			pbits;
 	int			size_line;
 	int			endian;
@@ -133,16 +134,13 @@ typedef struct s_fdf_data
 	float			*z_buffer;
 	t_argb			*screen_buffer;
 	t_camera		*camera;
+	int				lastkey;
 	int				mode;
 }	t_fdf_data;
 
-# ifndef M_PI
-    # define M_PI 3.14159265358979323846
-# endif
-
-
 /*	Maths Constants	*/
 # define TREEHALFS	1.5f
+# define M_PI 3.14159265358979323846
 /*	Windows and files Constants	*/
 # define FDF_FILE_DELIMITER	' '
 # define WINDOW_HEIGHT	1000
@@ -153,16 +151,16 @@ typedef struct s_fdf_data
 # define SEGMENT_PRECISION 200
 # define SEGMENT_MAXDISTANCE 100
 /*	Camera defaults	*/
+# define FRUSTUM_CULLING_PRECISION	60
 # define CAMERA_DEFAULT_FOCAL 100
-# define CAMERA_DEFAULT_POSITION	(t_vect3){10, 0, 50}
-# define CAMERA_DEFAULT_DIR	(t_vect3){0, 0, -1}
-# define CAMERA_DEFAULT_UP (t_vect3){0, 1, 0}
-# define CAMERA_DEFAULT_SPEED	1
-# define CAMERA_DEFAULT_SENSITIVITY 5
+# define CAMERA_DEFAULT_X	10
+# define CAMERA_DEFAULT_Y	0
+# define CAMERA_DEFAULT_Z	50 
+# define CAMERA_DEFAULT_SPEED	0.33
+# define CAMERA_DEFAULT_SENSITIVITY 2
 
-void	test(void *param);
-
-t_matrix4		get_perspective_matrix(float fov, float aspect, float near, float far);
+void			test(void *param);
+t_matrix4		get_perspective_matrix(float f, float a, float near, float far);
 t_matrix4		get_view_matrix(t_vect3 cam_pos, t_vect3 dir, t_vect3 right);
 t_matrix4		multiply_matrix4(t_matrix4 mat1, t_matrix4 mat2);
 t_vect4			project_point_cam(t_vect3 p, t_camera *cam);
@@ -182,23 +180,28 @@ void			set_points(t_list *lst, t_fdf_data *data);
 void			*generate_screen(t_fdf_data *data);
 void			triangle_test(t_fdf_data *data);
 //
-void			img_rasterize_triangle(t_triangle2 tri, t_argb c, t_fdf_data *data);
+void			img_rasterize_triangle(t_triangle2 t, t_argb c, t_fdf_data *d);
 void			img_draw_screen(t_image_data *img, t_fdf_data *data);
 void			img_draw_pixel(t_argb argb, int x, int y, t_image_data *img);
-void			img_set_pixel(t_argb color, int x, int y, t_fdf_data *data);
-void			img_set_pixel_zbuffer(t_argb color, t_vect4 point, t_fdf_data *data);
-void			img_set_circle(t_argb color, t_vect2 coord, int radius, t_fdf_data *data);
-void			img_set_disk(t_argb color, t_vect2 cord, int radius, t_fdf_data *data);
-void			img_set_point(t_argb color, t_vect4 point, float z, t_fdf_data *data);
-void			img_set_segment(t_argb color, t_vect3 a, t_vect3 b, t_fdf_data *data);
+void			img_set_pixel(t_argb c, int x, int y, t_fdf_data *data);
+void			img_set_pixel_zbuffer(t_argb c, t_vect4 p, t_fdf_data *data);
+void			img_set_circle(t_argb c, t_vect2 co, int rad, t_fdf_data *data);
+void			img_set_disk(t_argb c, t_vect2 co, int rad, t_fdf_data *data);
+void			img_set_point(t_argb c, t_vect4 point, float z, t_fdf_data *d);
+void			img_set_bsegment(t_argb c, t_vect3 a, t_vect3 b, t_fdf_data *d);
 //
 void			start_managers(t_fdf_data *data);
 int				close_window(t_fdf_data *data);
-int				key_manager(int keycode, t_fdf_data	*data);
 int				do_loop(t_fdf_data *param);
 //
+int				key_pressed(int keycode, t_fdf_data *data);
+int				key_released(int keycode, t_fdf_data *data);
+int				movement_keys(int keycode, t_fdf_data *data);
+int				camera_keys(int keycode, t_fdf_data *data);
+int				key_manager(int lastkey, t_fdf_data *data);
+//
 t_camera		*init_camera(float wwindow, float hwindow);
-t_quaternion    quaternion_normalize(t_quaternion q);
+t_quaternion	quaternion_normalize(t_quaternion q);
 t_quaternion	quaternion_multiply(t_quaternion q1, t_quaternion q2);
 t_quaternion	quaternion_conjugate(t_quaternion q);
 t_quaternion	quaternion_from_axis_angle(t_vect3 axis, float angle);
@@ -207,9 +210,10 @@ void			cam_update(t_camera *cam);
 int				cam_move_forward(float speed, t_camera *cam);
 int				cam_move_left(float speed, t_camera *cam);
 int				cam_move_up(float speed, t_camera *cam);
-int				cam_rotate(t_camera *camera, float yaw, float pitch, float roll);
+int				cam_rotate(t_camera *cam, float yaw, float pitch, float roll);
 
 //
+float			fast_sqrt(float number);
 float			dot_product(t_vect3 a, t_vect3 b);
 t_vect3			add(t_vect3 a, t_vect3 b);
 t_vect3			subtract(t_vect3 a, t_vect3 b);
@@ -220,10 +224,10 @@ float			vec3_length(t_vect3 v);
 t_vect3			vec3_rotate(t_quaternion q, t_vect3 v);
 t_vect4			vec3_to_homogeneous(t_vect3 v);
 //
-t_argb 			hsv_to_argb(t_hsv hsv);
+t_argb			hsv_to_argb(t_hsv hsv);
 //t_hsv 		argb_to_hsv(t_argb argb);
 int				argb_to_int(t_argb argb);
 //
-void			*memset_fast(void* ptr, int value, size_t num);
+void			*memset_fast(void *ptr, int value, size_t num);
 
 #endif

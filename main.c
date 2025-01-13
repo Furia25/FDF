@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 03:55:09 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 19:15:43 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,55 +27,6 @@
 	}
 	printf("\n");
 } */
-
-void	set_points(t_list *lst, t_fdf_data *data)
-{
-	int		index;
-	t_vect3	*array;
-	t_argb	color;
-
-	while (lst)
-	{
-		array = (t_vect3 *) lst->content;
-		index = -1;
-		while (array[++index].x != -1)
-		{
-			if (!is_point_in_cameradir(data->camera, array[index], data->camera->fov))
-				continue ;
-			color = (t_argb){0, 0, 0, 0};
-			if (array[index + 1].x != -1)
-				img_set_segment(color, array[index], array[index + 1], data);
-			if (lst->next)
-				img_set_segment(color, array[index], ((t_vect3 *)lst->next->content)[index], data);
-		}
-		lst = lst->next;
-	}
-}
-
-void	triangle_test(t_fdf_data *data)
-{
-	t_triangle3	*mesh;
-	size_t		index;
-	t_triangle2	temp;
-
-	index = 0;
-	mesh = data->mesh;
-	while (mesh[index].a.x != -1)
-	{
-/* 		if (
-			is_point_in_cameradir(data->camera, mesh[index].a, data->camera->fov) && \
-			is_point_in_cameradir(data->camera, mesh[index].b, data->camera->fov) && \
-			is_point_in_cameradir(data->camera, mesh[index].c, data->camera->fov)
-		){ */
-		temp = (t_triangle2){
-			project_point_cam(mesh[index].a, data->camera),
-			project_point_cam(mesh[index].b, data->camera),
-			project_point_cam(mesh[index].c, data->camera),
-		};
-		img_rasterize_triangle(temp, (t_argb){0, rand() % 150, rand() % 255, rand() % 255}, data);
-		index++;
-	}
-}
 
 int	count_triangles(t_list *lst)
 {
@@ -101,6 +52,24 @@ int	count_triangles(t_list *lst)
 	return (count * 2);
 }
 
+void create_subtri(t_triangle3 *mesh, size_t *tri, t_vect3 *vec, t_vect3 *next)
+{
+	t_vect3	top_left;
+	t_vect3	top_right;
+	t_vect3	bot_left;
+	t_vect3	bot_right;
+
+	top_left = *vec;
+	top_right = *(vec + 1);
+	bot_left = *next;
+	bot_right = *(next + 1);
+	mesh[*tri] = (t_triangle3){top_left, top_right, bot_left};
+	*tri += 1;
+	mesh[*tri] = (t_triangle3){top_right, bot_right, bot_left};
+	*tri += 1;
+	return ;
+}
+
 t_triangle3	*generate_mesh(t_triangle3 *mesh, t_list *lst)
 {
 	t_vect3		*vec;
@@ -122,8 +91,7 @@ t_triangle3	*generate_mesh(t_triangle3 *mesh, t_list *lst)
 			next = (t_vect3 *) lst->next->content;
 			if (next[i].x == -1 || next[i + 1].x == -1)
 				continue ;
-			mesh[tri++] = (t_triangle3){vec[i], vec[i + 1], next[i]};
-			mesh[tri++] = (t_triangle3){vec[i + 1], next[i + 1], next[i]};
+			create_subtri(mesh, &tri, vec + i, next + i);
 		}
 		lst = lst->next;
 	}
@@ -154,7 +122,6 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 {
 	data->width = WINDOW_WIDTH;
 	data->height = WINDOW_HEIGHT;
-	data->image = NULL;
 	data->mlx = mlx_init();
 	if (!data->mlx)
 		return (free(data), exit(EXIT_FAILURE), close(fd));
@@ -176,6 +143,7 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 	data->camera = init_camera(data->width, data->height);
 	if (!data->camera)
 		return (close_window(data));
+	ft_memset(&data->lastkey, -1, 6 * sizeof(int));
 	return (1);
 }
 
