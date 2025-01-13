@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 02:24:10 by val               #+#    #+#             */
-/*   Updated: 2025/01/11 17:34:02 by val              ###   ########.fr       */
+/*   Updated: 2025/01/12 18:52:35 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,19 @@ t_argb	hsv_to_argb(t_hsv hsv)
     cxm.y = cxm.x * (1 - fabsf(fmodf(hsv.h / 60.0, 2) - 1));
     cxm.z = hsv.v - cxm.x ;
     if (hsv.s == 0)
-    	return ((t_argb){255, (char)hsv.v * 255, (char)hsv.v * 255, (char)hsv.v * 255});
+    	return ((t_argb){0, (char)hsv.v * 255, (char)hsv.v * 255, (char)hsv.v * 255});
     if (hsv.h >= 0 && hsv.h < 60)
-		rgb = (t_argb) {255, cxm.x, cxm.y, 0};
+		rgb = (t_argb) {0, cxm.x, cxm.y, 0};
     else if (hsv.h >= 60 && hsv.h < 120)
-		rgb = (t_argb) {255, cxm.y, cxm.x, 0};
+		rgb = (t_argb) {0, cxm.y, cxm.x, 0};
     else if (hsv.h >= 120 && hsv.h < 180)
-		rgb = (t_argb) {255, 0, cxm.x, cxm.y};
+		rgb = (t_argb) {0, 0, cxm.x, cxm.y};
     else if (hsv.h >= 180 && hsv.h < 240)
-		rgb = (t_argb) {255, 0, cxm.y, cxm.x};
+		rgb = (t_argb) {0, 0, cxm.y, cxm.x};
     else if (hsv.h >= 240 && hsv.h < 300)
-		rgb = (t_argb) {255, cxm.y, 0, cxm.x};
+		rgb = (t_argb) {0, cxm.y, 0, cxm.x};
     else
-		rgb = (t_argb) {255, cxm.x, 0, cxm.y};
+		rgb = (t_argb) {0, cxm.x, 0, cxm.y};
     rgb.r = rgb.r + cxm.z;
     rgb.g = rgb.g + cxm.z;
     rgb.b = rgb.b + cxm.z;

@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/11 16:52:15 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 01:02:24 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@
 	index = 0;
 	while (lst[index].x != -1)
 	{
-		printf("| X : %f, Y : %f, Z : %f | ", lst[index].x,);
+		printf("| X : %.2f, Y : %.2f, Z : %.2f | ", lst[index].x, lst[index].y, lst[index].z);
 		index++;
 	}
+	printf("\n");
 } */
 
-void	generate_points(t_list *lst, t_image_data *img)
+void	set_points(t_list *lst, t_fdf_data *data)
 {
 	int		index;
 	t_vect3	*array;
-	t_vect3	*temp;
-	t_argb 	color;
+	t_argb	color;
 
 	while (lst)
 	{
@@ -40,26 +40,75 @@ void	generate_points(t_list *lst, t_image_data *img)
 		index = -1;
 		while (array[++index].x != -1)
 		{
-			//if (!is_point_in_cameradir(img->data->camera, array[index], img->data->camera->fov))
-				//continue;
+			if (!is_point_in_cameradir(data->camera, array[index], data->camera->fov))
+				continue ;
 			color = (t_argb){0, 0, 0, 0};
 			if (array[index + 1].x != -1)
-				img_draw_segment(color, array[index], array[index + 1], img);
+				img_set_segment(color, array[index], array[index + 1], data);
 			if (lst->next)
-			{
-				temp = (t_vect3 *) lst->next->content;
-				img_draw_segment(color, array[index], temp[index], img);
-			}
+				img_set_segment(color, array[index], ((t_vect3 *)lst->next->content)[index], data);
 		}
 		lst = lst->next;
 	}
 }
 
-void	*generate_wireframe(t_fdf_data *data)
+int	count_triangles(t_list *lst)
+{
+	t_vect3		*next_line;
+	int			count;
+	int			index;
+
+	count = 0;
+	while (lst)
+	{
+		index = -1;
+		while (((t_vect3 *) lst->content)[++index].x != -1)
+		{
+			if (!lst->next || ((t_vect3 *) lst->content)[index + 1].x == -1)
+				continue ;
+			next_line = (t_vect3 *) lst->next->content;
+			if (next_line[index].x == -1 || next_line[index + 1].x == -1)
+				continue ;
+			count++;
+		}
+		lst = lst->next;
+	}
+	return (count * 2);
+}
+
+t_triangle	*generate_mesh(t_triangle *mesh, t_list *lst)
+{
+	t_vect3		*vec;
+	t_vect3		*next;
+	int			i;
+	size_t		tri;
+
+	if (!mesh)
+		return (NULL);
+	tri = 0;
+	while (lst)
+	{
+		i = -1;
+		vec = ((t_vect3 *) lst->content);
+		while (vec[++i].x != -1)
+		{
+			if (!lst->next || vec[i + 1].x == -1)
+				continue ;
+			next = (t_vect3 *) lst->next->content;
+			if (next[i].x == -1 || next[i + 1].x == -1)
+				continue ;
+			mesh[tri++] = (t_triangle){vec[i], vec[i + 1], next[i]};
+			mesh[tri] = (t_triangle){vec[i + 1], next[i + 1], next[i]};
+		}
+		lst = lst->next;
+	}
+	return (mesh);
+}
+
+void	*generate_screen(t_fdf_data *data)
 {
 	t_image_data	img;
 
-	img.data = data;
 	img.height = data->height;
 	img.width = data->width;
 	img.connection = data->mlx;
@@ -70,7 +119,7 @@ void	*generate_wireframe(t_fdf_data *data)
 			&img.size_line, &img.endian);
 	if (!img.buffer)
 		return (NULL);
-	generate_points(data->points, &img);
+	data->image_data = img;
 	return (data->image);
 }
 
@@ -81,17 +130,22 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 	data->image = NULL;
 	data->mlx = mlx_init();
 	if (!data->mlx)
-	{
-		free(data);
-		close(fd);
-		exit(EXIT_FAILURE);
-		return(1);
-	}
+		return (free(data), exit(EXIT_FAILURE), close(fd));
+	data->screen_buffer = ft_calloc(data->width * data->height, sizeof(t_argb));
+	data->z_buffer = ft_calloc(data->width * data->height, sizeof(float));
+	if (!data->screen_buffer || !data->z_buffer)
+		return (close_window(data));
 	data->title = ft_strjoin("Wireframe - ", title);
-	data->window = mlx_new_window(data->mlx, data->width, data->height, data->title);
+	data->window = mlx_new_window(data->mlx, \
+		data->width, data->height, data->title);
 	if (!data->window)
 		return (close_window(data));
+	generate_screen(data);
 	data->points = read_file(fd);
+	data->mesh = ft_calloc(count_triangles(data->points) + 1, sizeof(t_triangle));
+	if (!data->image || !data->points || !data->mesh)
+		return (close_window(data));
+	generate_mesh(data->mesh, data->points);
 	data->camera = init_camera(data->width, data->height);
 	if (!data->camera)
 		return (close_window(data));

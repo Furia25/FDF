@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/10 13:50:48 by val              ###   ########.fr       */
+/*   Updated: 2025/01/12 15:39:54 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_vect3	*parse_line(char *line, int y)
 {
 	char		**words;
 	t_vect3	*result;
-	size_t		index;
+	int		index;
 
 	if (!line)
 		return (NULL);
@@ -54,15 +54,11 @@ static t_vect3	*parse_line(char *line, int y)
 		return (free(line), NULL);
 	result = ft_calloc(count_words(line, FDF_FILE_DELIMITER) + 1, sizeof(t_vect3));
 	if (!result)
-	{
-		free_chartab(words);
-		free(line);
-		return (NULL);
-	}
+		return (free_chartab(words), free(line), NULL);
 	index = 0;
 	while (words[index])
 	{
-		result[index] = (t_vect3){index,y,(float) ft_atoi(words[index]) / 3};
+		result[index] = (t_vect3){(float)y, -(((float) ft_atoi(words[index])) / 5), -index};
 		index++;
 	}
 	result[index] = (t_vect3){-1, -1, -1};
@@ -75,12 +71,12 @@ t_list	*read_file(int fd)
 	t_list		*current;
 	t_list		*temp;
 	t_vect3		*values;
-	float		y;
+	size_t		z;
 
 	ft_printf("\033[1;34mGENERATING WIREFRAME...\033[0m\n");
 	current = NULL;
-	y = 0;
-	values = parse_line(get_next_line(fd), y);
+	z = 0;
+	values = parse_line(get_next_line(fd), z);
 	while (values)
 	{
 		temp = ft_lstnew(values);
@@ -91,8 +87,8 @@ t_list	*read_file(int fd)
 			return (NULL);
 		}
 		ft_lstadd_back(&current, temp);
-		values = parse_line(get_next_line(fd), y);
-		y ++;
+		z++;
+		values = parse_line(get_next_line(fd), z);
 	}
 	ft_printf("\033[1;92mWIREFRAME GENERATED!\033[0m\n");
 	return (current);

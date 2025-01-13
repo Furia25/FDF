@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/**/
-/*:::  ::::::::   */
-/*   managers.c :+:  :+::+:   */
-/*+:+ +:+ +:+ */
-/*   By: val <val@student.42.fr>+#+  +:+   +#+*/
-/*+#+#+#+#+#+   +#+   */
-/*   Created: 2025/01/09 14:07:07 by val   #+##+# */
-/*   Updated: 2025/01/09 19:59:45 by val  ###   ########.fr   */
-/**/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   managers.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
+/*   Updated: 2025/01/13 01:02:46 by val              ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
@@ -23,6 +23,9 @@ int	close_window(t_fdf_data *data)
 {
 	mlx_loop_end(data->mlx);
 	ft_lstclear(&data->points, free);
+	free(data->screen_buffer);
+	free(data->z_buffer);
+	free(data->mesh);
 	if (data->image)
 		mlx_destroy_image(data->mlx, data->image);
 	if (data->window)
@@ -59,13 +62,17 @@ int	movement_manager(int keycode, t_fdf_data *data)
 	if (keycode == XK_Shift_L)
 		keypressed = cam_move_up(camera->spd, camera);
 	if (keycode == XK_Up)
-		keypressed = cam_rotate(camera, -CAMERA_DEFAULT_SENSITIVITY, 0);
+		keypressed = cam_rotate(camera, -CAMERA_DEFAULT_SENSITIVITY, 0, 0);
 	if (keycode == XK_Down)
-		keypressed = cam_rotate(camera, CAMERA_DEFAULT_SENSITIVITY, 0);
+		keypressed = cam_rotate(camera, CAMERA_DEFAULT_SENSITIVITY, 0, 0);
 	if (keycode == XK_Right)
-		keypressed = cam_rotate(camera, 0, -CAMERA_DEFAULT_SENSITIVITY);
+		keypressed = cam_rotate(camera, 0, -CAMERA_DEFAULT_SENSITIVITY, 0);
 	if (keycode == XK_Left)
-		keypressed = cam_rotate(camera, 0, CAMERA_DEFAULT_SENSITIVITY);
+		keypressed = cam_rotate(camera, 0, CAMERA_DEFAULT_SENSITIVITY, 0);
+	if (keycode == XK_e)
+		keypressed = cam_rotate(camera, 0, 0, CAMERA_DEFAULT_SENSITIVITY);
+	if (keycode == XK_a)
+		keypressed = cam_rotate(camera, 0, 0, -CAMERA_DEFAULT_SENSITIVITY);
 	if (keypressed)
 		cam_update(camera);
 	return (1);
@@ -86,9 +93,12 @@ int	do_loop(t_fdf_data *data)
 		data->camera->moved = 0;
 		if (data->image)
 			mlx_destroy_image(data->mlx, data->image);
-		data->image = generate_wireframe(data);
+		generate_screen(data);
 		if (!data->image)
-			return (EXIT_FAILURE);
+			return (close_window(data));
+		memset_fast(data->screen_buffer, 0, data->width * data->height * sizeof(t_argb));
+		//set_points(data->points, data);
+		img_draw_screen(&data->image_data, data);
 		mlx_put_image_to_window(data->mlx, data->window, data->image, 0, 0);
 	}
 	return (EXIT_SUCCESS);

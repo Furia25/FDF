@@ -6,22 +6,22 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/11 18:24:52 by val              ###   ########.fr       */
+/*   Updated: 2025/01/12 18:54:10 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <math.h>
 
-void	img_set_pixel(t_argb rgb, t_vect2 co, t_image_data *img)
+void	img_draw_pixel(t_argb argb, int x, int y, t_image_data *img)
 {
 	int	pixel;
 	int	color;
-
-	if (co.x < 0 || co.x > img->width || co.y < 0 || co.y > img->height)
+	
+	if (x < 0 || x > img->width || y < 0 || y > img->height)
 		return ;
-	pixel = ((int) co.y * img->size_line) + ((int) co.x * 4);
-	color = argb_to_int(rgb);
+	pixel = ((int) y * img->size_line) + ((int) x * 4);
+	color = argb_to_int(argb);
 	if (img->pbits != 32)
 		color = mlx_get_color_value(img->connection, color);
 	if (img->endian == 1)
@@ -40,7 +40,47 @@ void	img_set_pixel(t_argb rgb, t_vect2 co, t_image_data *img)
 	}
 }
 
-void	img_set_rect(t_argb color, t_vect2 co, t_vect2 size, t_image_data *img)
+void	img_draw_screen(t_image_data *img, t_fdf_data *data)
+{
+	t_argb	*screen;
+	t_argb	temp;
+	int		x;
+	int		y;
+
+	screen = data->screen_buffer;
+	y = 0;
+	while (y < data->height)
+	{
+		x = 0;
+		while (x < data->width)
+		{
+			temp = screen[y * data->width + x];
+			if (!(temp.r == 0 && temp.g == 0 && temp.a == 0))
+				img_draw_pixel(temp, x, y, img);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	img_set_pixel(t_argb color, int x, int y, t_fdf_data *data)
+{
+	if (x < 0 || x >= data->width || y < 0 || y >= data->height)
+		return ;
+	data->screen_buffer[y * data->width + x] = color;
+}
+
+void	img_set_pixel_zbuffer(t_argb color, t_vect4 point, t_fdf_data *data)
+{
+	if (point.x < 0 || point.x >= data->width || point.y < 0 || point.y >= data->height)
+		return ;
+	if (point.w < data->z_buffer[(int)(point.y * data->width + point.x)])
+		return ;
+	data->screen_buffer[(int)(point.y * data->width + point.x)] = color;
+	data->z_buffer[(int)(point.y * data->width + point.x)] = point.w;
+}
+
+void	img_set_rect(t_argb color, t_vect2 co, t_vect2 size, t_fdf_data *data)
 {
 	unsigned int	i;
 	unsigned int	y;
@@ -52,56 +92,9 @@ void	img_set_rect(t_argb color, t_vect2 co, t_vect2 size, t_image_data *img)
 		y = 0;
 		while (y < (unsigned int) size.y)
 		{
-			img_set_pixel(color, (t_vect2){co.x + i, co.y + y}, img);
+			img_set_pixel(color, co.x + i, co.y + y, data);
 			y++;
 		}
 		i++;
 	}
-}
-
-void	img_draw_disk(t_argb color, t_vect2 cord, int radius, t_image_data *img)
-{
-	int	dx;
-	int	dy;
-
-	dy = -radius;
-	while (dy <= radius)
-	{
-		dx = -radius;
-		while (dx <= radius)
-		{
-			if (dx * dx + dy * dy <= radius * radius)
-				img_set_pixel(color, (t_vect2){cord.x + dx, cord.y + dy}, img);
-			dx++;
-		}
-		dy++;
-	}
-}
-
-void	img_draw_circle(t_argb color, t_vect2 coord, int radius, t_image_data *img)
-{
-	float		angle;
-	t_vect2		xy;
-	int			index;
-
-	index = 0;
-	while (index < CIRCLE_PRECISION)
-	{
-		angle = 2 * M_PI * index / CIRCLE_PRECISION;
-		xy.x = coord.x + radius * cos(angle);
-		xy.y = coord.y + radius * sin(angle);
-		img_set_pixel(color, xy, img);
-		index++;
-	}
-}
-
-void	img_draw_point(t_argb color, t_vect4 point, float z, t_image_data *img)
-{
-	float	point_size;
-
-	if (point.z <= 0 || point.x <= 0 ||  point.y <= 0)
-		return ;
-	point_size = PERSPECTIVE_FACTOR * (1 /point.w);
-	color = hsv_to_argb((t_hsv){(int) (z * 10) % 360, 255, 255});
-	img_draw_disk(color, (t_vect2){point.x, point.y}, point_size, img);
 }

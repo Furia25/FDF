@@ -6,22 +6,25 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:06:43 by val               #+#    #+#             */
-/*   Updated: 2025/01/11 18:26:08 by val              ###   ########.fr       */
+/*   Updated: 2025/01/11 19:56:35 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	cam_rotate(t_camera *camera, float yaw, float pitch)
+int	cam_rotate(t_camera *camera, float yaw, float pitch, float roll)
 {
 	t_quaternion	pitch_q;
 	t_quaternion	yaw_q;
-	
+	t_quaternion	roll_q;
+	t_quaternion	combined_q;
 	
 	pitch_q = quaternion_from_axis_angle(camera->up, pitch);
 	yaw_q = quaternion_from_axis_angle(camera->right, yaw);
-	camera->dir = vec3_rotate(pitch_q, camera->dir);
-	camera->dir = vec3_rotate(yaw_q, camera->dir);
+	combined_q = quaternion_multiply(yaw_q, pitch_q);
+	roll_q = quaternion_from_axis_angle(camera->dir, roll);
+	combined_q = quaternion_multiply(combined_q, roll_q);
+	camera->dir = vec3_rotate(combined_q, camera->dir);
 	camera->dir = normalize(camera->dir);
 	camera->right = cross_product(camera->dir, CAMERA_DEFAULT_UP);
     camera->right = normalize(camera->right);
