@@ -6,7 +6,7 @@
 #    By: val <val@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/13 23:20:17 by val               #+#    #+#              #
-#    Updated: 2025/01/13 23:35:05 by val              ###   ########.fr        #
+#    Updated: 2025/01/14 00:29:29 by val              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = wireframe
 
 SRC_DIR = src
 OBJ_DIR = obj
+INC_DIR = includes
 LIBFT_DIR = libs/libft
 MLX_DIR = libs/minilibx-linux
 
@@ -25,7 +26,7 @@ CC = gcc
 OPTIFLAGS = -O3
 CFLAGS = $(OPTIFLAGS) -Werror -Wextra -Wall
 LDFLAGS = -lXext -lm -lX11 -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft
-INCLUDES = -I$(MLX_DIR)
+INCLUDES = -I$(MLX_DIR) -I$(INC_DIR) -I$(LIBFT_DIR)
 
 # Règle principale
 all: $(NAME)
@@ -41,9 +42,10 @@ $(OBJ_DIR):
 
 $(LIBFT_DIR)/libft.a:
 	$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) bonus -C $(LIBFT_DIR)
 
 $(MLX_DIR)/libmlx.a:
-	sh $(MLX_DIR)/configure
+	cd $(MLX_DIR) && bash configure
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -51,7 +53,7 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	sh $(MLX_DIR)/configure clean
+	cd $(MLX_DIR) && bash configure clean
 	$(MAKE) fclean -C $(LIBFT_DIR)
 
 re: fclean all
