@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/12 23:41:50 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 03:54:57 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,31 @@ typedef struct s_argb
 
 typedef struct s_hsv
 {
-	float h;
-	float s;
-	float v;
+	int	h;
+	int s;
+	int v;
 }	t_hsv;
 
-typedef struct s_triangle
+typedef struct s_triangle3
 {
 	t_vect3	a;
 	t_vect3	b;
 	t_vect3	c;
-}	t_triangle;
+}	t_triangle3;
+
+typedef struct s_triangle2
+{
+	t_vect4	a;
+	t_vect4	b;
+	t_vect4	c;
+}	t_triangle2;
+
+typedef struct s_bbox{
+    int	x_min;
+	int	x_max;
+	int	y_min;
+	int	y_max;
+}	t_bbox;
 
 typedef struct s_camera
 {
@@ -115,10 +129,11 @@ typedef struct s_fdf_data
 	int				height;
 	int				width;
 	t_list			*points;
-	t_triangle		*mesh;
+	t_triangle3		*mesh;
 	float			*z_buffer;
 	t_argb			*screen_buffer;
 	t_camera		*camera;
+	int				mode;
 }	t_fdf_data;
 
 # ifndef M_PI
@@ -134,8 +149,8 @@ typedef struct s_fdf_data
 # define WINDOW_WIDTH	1000
 /*	Drawing Constants	*/
 # define CIRCLE_PRECISION 100
-# define PERSPECTIVE_FACTOR	50.0f
-# define SEGMENT_PRECISION 80
+# define PERSPECTIVE_FACTOR	80.0f
+# define SEGMENT_PRECISION 200
 # define SEGMENT_MAXDISTANCE 100
 /*	Camera defaults	*/
 # define CAMERA_DEFAULT_FOCAL 100
@@ -165,7 +180,9 @@ int				check_file(int fd);
 //
 void			set_points(t_list *lst, t_fdf_data *data);
 void			*generate_screen(t_fdf_data *data);
+void			triangle_test(t_fdf_data *data);
 //
+void			img_rasterize_triangle(t_triangle2 tri, t_argb c, t_fdf_data *data);
 void			img_draw_screen(t_image_data *img, t_fdf_data *data);
 void			img_draw_pixel(t_argb argb, int x, int y, t_image_data *img);
 void			img_set_pixel(t_argb color, int x, int y, t_fdf_data *data);

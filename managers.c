@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
-/*   Updated: 2025/01/13 01:02:46 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 03:55:41 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,15 @@ int	movement_manager(int keycode, t_fdf_data *data)
 		keypressed = cam_rotate(camera, 0, -CAMERA_DEFAULT_SENSITIVITY, 0);
 	if (keycode == XK_Left)
 		keypressed = cam_rotate(camera, 0, CAMERA_DEFAULT_SENSITIVITY, 0);
-	if (keycode == XK_e)
+/* 	if (keycode == XK_e)
 		keypressed = cam_rotate(camera, 0, 0, CAMERA_DEFAULT_SENSITIVITY);
 	if (keycode == XK_a)
-		keypressed = cam_rotate(camera, 0, 0, -CAMERA_DEFAULT_SENSITIVITY);
+		keypressed = cam_rotate(camera, 0, 0, -CAMERA_DEFAULT_SENSITIVITY); */
+	if (keycode == XK_f)
+	{
+		data->mode *= -1;
+		keypressed = cam_rotate(camera, 0, 0, 0);
+	}
 	if (keypressed)
 		cam_update(camera);
 	return (1);
@@ -97,7 +102,11 @@ int	do_loop(t_fdf_data *data)
 		if (!data->image)
 			return (close_window(data));
 		memset_fast(data->screen_buffer, 0, data->width * data->height * sizeof(t_argb));
-		//set_points(data->points, data);
+		memset_fast(data->z_buffer, 5000, data->width * data->height * sizeof(float));
+		if (data->mode == -1)
+			set_points(data->points, data);
+		else
+			triangle_test(data);
 		img_draw_screen(&data->image_data, data);
 		mlx_put_image_to_window(data->mlx, data->window, data->image, 0, 0);
 	}

@@ -23,6 +23,11 @@ t_vect3	get_interpolate_3d(t_vect3 p1, t_vect3 p2, float t)
 	return (result);
 }
 
+float	interpolate(float a, float b, float t)
+{
+	return (a + t * (b - a));
+}
+
 float	normalize_angle(float angle)
 {
 	while (angle >= 360.0f)

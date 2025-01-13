@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/12 18:54:10 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 03:28:27 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,15 @@ void	img_set_pixel(t_argb color, int x, int y, t_fdf_data *data)
 
 void	img_set_pixel_zbuffer(t_argb color, t_vect4 point, t_fdf_data *data)
 {
+	float	depth;
+
 	if (point.x < 0 || point.x >= data->width || point.y < 0 || point.y >= data->height)
 		return ;
-	if (point.w < data->z_buffer[(int)(point.y * data->width + point.x)])
+	depth = point.z / point.w;
+	if (depth < data->z_buffer[(int)(point.y * data->width + point.x)])
 		return ;
 	data->screen_buffer[(int)(point.y * data->width + point.x)] = color;
-	data->z_buffer[(int)(point.y * data->width + point.x)] = point.w;
+	data->z_buffer[(int)(point.y * data->width + point.x)] = depth;
 }
 
 void	img_set_rect(t_argb color, t_vect2 co, t_vect2 size, t_fdf_data *data)

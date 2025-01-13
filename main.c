@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 01:02:24 by val              ###   ########.fr       */
+/*   Updated: 2025/01/13 03:55:09 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,31 @@ void	set_points(t_list *lst, t_fdf_data *data)
 	}
 }
 
+void	triangle_test(t_fdf_data *data)
+{
+	t_triangle3	*mesh;
+	size_t		index;
+	t_triangle2	temp;
+
+	index = 0;
+	mesh = data->mesh;
+	while (mesh[index].a.x != -1)
+	{
+/* 		if (
+			is_point_in_cameradir(data->camera, mesh[index].a, data->camera->fov) && \
+			is_point_in_cameradir(data->camera, mesh[index].b, data->camera->fov) && \
+			is_point_in_cameradir(data->camera, mesh[index].c, data->camera->fov)
+		){ */
+		temp = (t_triangle2){
+			project_point_cam(mesh[index].a, data->camera),
+			project_point_cam(mesh[index].b, data->camera),
+			project_point_cam(mesh[index].c, data->camera),
+		};
+		img_rasterize_triangle(temp, (t_argb){0, rand() % 150, rand() % 255, rand() % 255}, data);
+		index++;
+	}
+}
+
 int	count_triangles(t_list *lst)
 {
 	t_vect3		*next_line;
@@ -76,7 +101,7 @@ int	count_triangles(t_list *lst)
 	return (count * 2);
 }
 
-t_triangle	*generate_mesh(t_triangle *mesh, t_list *lst)
+t_triangle3	*generate_mesh(t_triangle3 *mesh, t_list *lst)
 {
 	t_vect3		*vec;
 	t_vect3		*next;
@@ -97,11 +122,13 @@ t_triangle	*generate_mesh(t_triangle *mesh, t_list *lst)
 			next = (t_vect3 *) lst->next->content;
 			if (next[i].x == -1 || next[i + 1].x == -1)
 				continue ;
-			mesh[tri++] = (t_triangle){vec[i], vec[i + 1], next[i]};
-			mesh[tri] = (t_triangle){vec[i + 1], next[i + 1], next[i]};
+			mesh[tri++] = (t_triangle3){vec[i], vec[i + 1], next[i]};
+			mesh[tri++] = (t_triangle3){vec[i + 1], next[i + 1], next[i]};
 		}
 		lst = lst->next;
 	}
+	mesh[tri] = (t_triangle3){(t_vect3){-1, -1, -1}, \
+		(t_vect3){-1, -1, -1}, (t_vect3){-1, -1, -1}};
 	return (mesh);
 }
 
@@ -142,7 +169,7 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 		return (close_window(data));
 	generate_screen(data);
 	data->points = read_file(fd);
-	data->mesh = ft_calloc(count_triangles(data->points) + 1, sizeof(t_triangle));
+	data->mesh = ft_calloc(count_triangles(data->points) + 1, sizeof(t_triangle3));
 	if (!data->image || !data->points || !data->mesh)
 		return (close_window(data));
 	generate_mesh(data->mesh, data->points);
@@ -168,6 +195,7 @@ int	main(int argc, char **argv)
 		return ((void) close(fd), EXIT_FAILURE);
 	init_data(data, fd, argv[1]);
 	data->camera->moved = 1;
+	data->mode = 1;
 	start_managers(data);
 	mlx_loop(data->mlx);
 	return (EXIT_SUCCESS);
