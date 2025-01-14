@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:15:45 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 19:22:30 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 19:30:57 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	rasterize_tri(t_fdf_data *data)
 		img_rasterize_triangle(
 			temp,
 			(t_argb){\
-				0, 230 - a, 40 + mesh[i].a.x, 240 + a * (data->color / 7)
+				0, 230 - a, 40, 240 + a * (data->color / 7)
 		}, data);
 		i++;
 	}

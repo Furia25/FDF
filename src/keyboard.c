@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:53:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 18:42:35 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 19:32:06 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	movement_keys(int keycode, t_fdf_data *data)
 
 	camera = data->camera;
 	camera->spd += CAMERA_DEFAULT_SPEED / 100;
-	camera->spd = fmin(camera->spd, CAMERA_DEFAULT_SENSITIVITY * 2);
+	camera->spd = fmin(camera->spd, CAMERA_DEFAULT_SENSITIVITY * 4);
 	keypressed = 0;
 	if (keycode == XK_w)
 		keypressed = cam_move_forward(camera->spd, camera);

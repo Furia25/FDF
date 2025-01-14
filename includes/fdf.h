@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 18:38:00 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 19:33:19 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ enum e_draw_mode
 # define M_PI 3.14159265358979323846
 /*	Windows and files Constants	*/
 # define FDF_FILE_DELIMITER	' '
-# define FILE_FACTOR	3
+# define FILE_FACTOR	4
 # define WINDOW_WIDTH	1920
 # define WINDOW_HEIGHT	1080
 /*	Drawing Constants	*/
