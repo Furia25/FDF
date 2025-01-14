@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 23:14:51 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 02:32:01 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ t_triangle3	*generate_mesh(t_triangle3 *mesh, t_list *lst)
 	int			i;
 	size_t		tri;
 
-	if (!mesh)
-		return (NULL);
 	tri = 0;
 	while (lst)
 	{
@@ -95,7 +93,7 @@ t_triangle3	*generate_mesh(t_triangle3 *mesh, t_list *lst)
 		}
 		lst = lst->next;
 	}
-	mesh[tri] = (t_triangle3){(t_vect3){-1, -1, -1}, \
+	mesh[tri] = (t_triangle3){(t_vect3){-1, -1, -1},
 		(t_vect3){-1, -1, -1}, (t_vect3){-1, -1, -1}};
 	return (mesh);
 }

@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 23:14:11 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 00:12:59 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <X11/keysymdef.h>
 # include "mlx_int.h"
 # include "mlx.h"
-# include "./libft/libft.h"
-# include "./libft/ft_printf.h"
+# include "libft.h"
+# include "ft_printf.h"
 # include <math.h>
 
 typedef struct s_vector2

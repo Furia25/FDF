@@ -6,12 +6,18 @@
 #    By: val <val@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/13 23:20:17 by val               #+#    #+#              #
-#    Updated: 2025/01/14 00:29:29 by val              ###   ########.fr        #
+#    Updated: 2025/01/14 03:15:21 by val              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Nom de l'exécutable
-NAME = wireframe
+RED = \033[31m
+GREEN = \033[32m
+YELLOW = \033[33m
+BLUE = \033[34m
+RESET = \033[0m
+BG_GREEN = \033[42m
+
+NAME = fdf
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -25,37 +31,49 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 CC = gcc
 OPTIFLAGS = -O3
 CFLAGS = $(OPTIFLAGS) -Werror -Wextra -Wall
-LDFLAGS = -lXext -lm -lX11 -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft
+MLXFLAGS = -L$(MLX_DIR) -lmlx
+FTFLAGS = -L$(LIBFT_DIR) -lft
+LDFLAGS = -lXext -lm -lX11 $(MLXFLAGS) $(FTFLAGS)
 INCLUDES = -I$(MLX_DIR) -I$(INC_DIR) -I$(LIBFT_DIR)
 
-# Règle principale
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT_DIR)/libft.a $(MLX_DIR)/libmlx.a
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	@$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	@echo "$(BG_GREEN)>>> Program $(NAME) compiled!$(RESET)"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(OBJ_DIR)
+	@echo "$(BLUE)>>> Compiling $<...$(RESET)"
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@echo "$(YELLOW)>>> Directory '$(OBJ_DIR)' created!$(RESET)"
+	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT_DIR)/libft.a:
-	$(MAKE) -C $(LIBFT_DIR)
-	$(MAKE) bonus -C $(LIBFT_DIR)
+	@echo "$(BLUE)>>> Compiling Libft...$(RESET)"
+	@$(MAKE) -C $(LIBFT_DIR) > /dev/null 2>&1
+	@$(MAKE) bonus -C $(LIBFT_DIR) > /dev/null 2>&1
+	@echo "$(GREEN)>>> Compilation achieved!$(RESET)"
 
 $(MLX_DIR)/libmlx.a:
-	cd $(MLX_DIR) && bash configure
+	@echo "$(BLUE)>>> Configuration of MiniLibX...$(RESET)"
+	@cd $(MLX_DIR) && bash configure > /dev/null 2>&1
+	@echo "$(GREEN)>>> Configuration achieved!$(RESET)"
+
+cleanlibs:
+	@echo "$(YELLOW)>>> Cleaning libs...$(RESET)"
+	@cd $(MLX_DIR)  && bash configure clean > /dev/null 2>&1
+	@$(MAKE) fclean -C $(LIBFT_DIR) > /dev/null 2>&1
 
 clean:
-	rm -rf $(OBJ_DIR)
-	$(MAKE) clean -C $(LIBFT_DIR)
+	@echo "$(YELLOW)>>> Cleaning objects$(RESET)"
+	@rm -rf $(OBJ_DIR) > /dev/null 2>&1
 
-fclean: clean
-	rm -f $(NAME)
-	cd $(MLX_DIR) && bash configure clean
-	$(MAKE) fclean -C $(LIBFT_DIR)
+fclean: clean cleanlibs
+	@echo "$(YELLOW)>>> Cleaning executable...$(RESET)"
+	@rm -f $(NAME) > /dev/null 2>&1
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all cleanlibs clean fclean re
