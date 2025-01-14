@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 03:56:39 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 18:38:00 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,15 +136,25 @@ typedef struct s_fdf_data
 	t_camera		*camera;
 	int				lastkey;
 	int				mode;
+	int				color;
 }	t_fdf_data;
+
+enum e_draw_mode
+{
+	WIREFRAME_MODE,
+	POINT_MODE,
+	POLYGON_MODE,
+	MAX_DRAWING_MODE
+};
 
 /*	Maths Constants	*/
 # define TREEHALFS	1.5f
 # define M_PI 3.14159265358979323846
 /*	Windows and files Constants	*/
 # define FDF_FILE_DELIMITER	' '
-# define WINDOW_WIDTH	1280
-# define WINDOW_HEIGHT	720
+# define FILE_FACTOR	3
+# define WINDOW_WIDTH	1920
+# define WINDOW_HEIGHT	1080
 /*	Drawing Constants	*/
 # define CIRCLE_PRECISION 100
 # define PERSPECTIVE_FACTOR	80.0f
@@ -157,7 +167,7 @@ typedef struct s_fdf_data
 # define CAMERA_DEFAULT_Y	0
 # define CAMERA_DEFAULT_Z	50
 # define CAMERA_DEFAULT_SPEED	0.33
-# define CAMERA_DEFAULT_SENSITIVITY 1
+# define CAMERA_DEFAULT_SENSITIVITY 0.5
 
 t_matrix4		get_perspective_matrix(float f, float a, float near, float far);
 t_matrix4		get_view_matrix(t_vect3 cam_pos, t_vect3 dir, t_vect3 right);
@@ -175,11 +185,13 @@ t_list			*read_file(int fd);
 int				try_open_file(int *fd, char *file_path);
 int				check_file(int fd);
 //
-void			set_points(t_list *lst, t_fdf_data *data);
+void			rasterize_wireframe(t_list *lst, t_fdf_data *data);
 void			*generate_screen(t_fdf_data *data);
-void			triangle_test(t_fdf_data *data);
+void			rasterize_tri(t_fdf_data *data);
+void			rasterize_points(t_list *lst, t_fdf_data *data);
 //
 int				frustum(t_triangle2 tri, t_fdf_data *data);
+void			img_rasterize_segtri(t_triangle2 tri, t_argb c, t_fdf_data *data);
 void			img_rasterize_triangle(t_triangle2 t, t_argb c, t_fdf_data *d);
 void			img_draw_screen(t_image_data *img, t_fdf_data *data);
 void			img_draw_pixel(t_argb argb, int x, int y, t_image_data *img);
@@ -199,6 +211,7 @@ int				key_released(int keycode, t_fdf_data *data);
 int				movement_keys(int keycode, t_fdf_data *data);
 int				camera_keys(int keycode, t_fdf_data *data);
 int				key_manager(int lastkey, t_fdf_data *data);
+int				mouse_manager(int x, int y, t_fdf_data *data);
 //
 t_camera		*init_camera(float wwindow, float hwindow);
 t_quaternion	quaternion_normalize(t_quaternion q);

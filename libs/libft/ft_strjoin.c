@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 16:25:15 by vdurand           #+#    #+#             */
-/*   Updated: 2024/11/08 11:41:41 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 15:17:53 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	index;
 	size_t	pre_size;
 
+	if (!s1 || !s2)
+		return (NULL);
 	pre_size = ft_strlen(s1);
 	temp = (char *)malloc(sizeof(char) * (pre_size + ft_strlen(s2) + 1));
 	if (!temp)
