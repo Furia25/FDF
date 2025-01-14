@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:53:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 19:36:12 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 18:42:35 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,18 @@ int	key_released(int keycode, t_fdf_data *data)
 {
 	if (keycode == XK_f)
 	{
-		data->mode *= -1;
+		data->mode += 1;
+		if (data->mode >= MAX_DRAWING_MODE)
+			data->mode = 0;
 		cam_update(data->camera);
+	}
+	if (keycode == XK_equal)
+	{
+		data->color += 1;
+	}
+	if (keycode == XK_minus)
+	{
+		data->color -= 1;
 	}
 	data->lastkey = -1;
 	return (1);

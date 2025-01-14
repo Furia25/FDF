@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   color_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/14 03:57:34 by val               #+#    #+#             */
-/*   Updated: 2025/01/14 03:58:13 by val              ###   ########.fr       */
-/*                                                                            */
+/**/
+/*:::  ::::::::   */
+/*   color_utils.c  :+:  :+::+:   */
+/*+:+ +:+ +:+ */
+/*   By: vdurand <vdurand@student.42.fr>+#+  +:+   +#+*/
+/*+#+#+#+#+#+   +#+   */
+/*   Created: 2025/01/14 03:57:34 by val   #+##+# */
+/*   Updated: 2025/01/14 17:43:15 by vdurand  ###   ########.fr   */
+/**/
 /* ************************************************************************** */
 
 #include "fdf.h"
@@ -17,48 +17,35 @@ int	argb_to_int(t_argb argb)
 	return (argb.a << 24 | argb.r << 16 | argb.g << 8 | argb.b);
 }
 
-t_argb	hsv_to_argb(t_hsv hsv)
+void	argb_set(t_argb *argb, float r, float g, float b)
 {
-	t_argb rgb;
-	unsigned char region, remainder, p, q, t;
-
-	if (hsv.s == 0)
-	{
-		rgb.r = hsv.v;
-		rgb.g = hsv.v;
-		rgb.b = hsv.v;
-		return (rgb);
-	}
-    
-    region = hsv.h / 43;
-    remainder = (hsv.h - (region * 43)) * 6; 
-    
-    p = (hsv.v * (255 - hsv.s)) >> 8;
-    q = (hsv.v * (255 - ((hsv.s * remainder) >> 8))) >> 8;
-    t = (hsv.v * (255 - ((hsv.s * (255 - remainder)) >> 8))) >> 8;
-    
-    switch (region)
-    {
-        case 0:
-            rgb.r = hsv.v; rgb.g = t; rgb.b = p;
-            break;
-        case 1:
-            rgb.r = q; rgb.g = hsv.v; rgb.b = p;
-            break;
-        case 2:
-            rgb.r = p; rgb.g = hsv.v; rgb.b = t;
-            break;
-        case 3:
-            rgb.r = p; rgb.g = q; rgb.b = hsv.v;
-            break;
-        case 4:
-            rgb.r = t; rgb.g = p; rgb.b = hsv.v;
-            break;
-        default:
-            rgb.r = hsv.v; rgb.g = p; rgb.b = q;
-            break;
-    }
-
-    return rgb;
+	argb->a = 0;
+	argb->r = r * 255;
+	argb->g = g * 255;
+	argb->b = b * 255;
 }
 
+t_argb	hsv_to_argb(t_hsv hsv)
+{
+	float	c;
+	float	x;
+	float	m;
+	t_argb	rgb;
+
+	c = hsv.v * hsv.s;
+	x = c * (1 - fabsf(fmodf(hsv.h / 60.0f, 2) - 1));
+	m = hsv.v - c;
+	if (hsv.h >= 0 && hsv.h < 60)
+		argb_set(&rgb, c + m, x + m, m);
+	else if (hsv.h >= 60 && hsv.h < 120)
+		argb_set(&rgb, x + m, c + m, m);
+	else if (hsv.h >= 120 && hsv.h < 180)
+		argb_set(&rgb, m, c + m, x + m);
+	else if (hsv.h >= 180 && hsv.h < 240)
+		argb_set(&rgb, m, x + m, c + m);
+	else if (hsv.h >= 240 && hsv.h < 300)
+		argb_set(&rgb, x + m, m, c + m);
+	else
+		argb_set(&rgb, c + m, m, x + m);
+	return (rgb);
+}

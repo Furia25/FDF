@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 03:54:14 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 18:44:41 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 	data->camera = init_camera(data->width, data->height);
 	if (!data->camera)
 		return (close_window(data));
+	data->color = -13;
 	return (1);
 }
 
@@ -121,7 +122,7 @@ int	main(int argc, char **argv)
 		return ((void) close(fd), EXIT_FAILURE);
 	init_data(data, fd, argv[1]);
 	data->camera->moved = 1;
-	data->mode = 1;
+	data->mode = POLYGON_MODE;
 	start_managers(data);
 	mlx_loop(data->mlx);
 	return (EXIT_SUCCESS);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image_managing2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 00:26:44 by val               #+#    #+#             */
-/*   Updated: 2025/01/14 03:50:01 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 19:13:51 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	img_set_bsegment(t_argb color, t_vect3 a, t_vect3 b, t_fdf_data *data)
 
 	dist = vec3_distance(a, data->camera->pos);
 	diff = subtract(b, a);
-	steps = (int)(SEGMENT_PRECISION * fmaxf(0.2f, vec3_length(diff) / 50.0f) \
-		* fmaxf(0.3f, expf(-dist / 100.0f)));
+	steps = (int)(SEGMENT_PRECISION * fmaxf(0.4f, vec3_length(diff) / 25.0f) \
+		* fmaxf(0.05f, expf(-dist / 40.0f)));
 	if (steps < 1)
 		steps = 1;
 	index = 0;
@@ -77,9 +77,9 @@ void	img_set_point(t_argb color, t_vect4 point, float z, t_fdf_data *data)
 {
 	float	point_size;
 
-	if (point.z <= 0 || point.x <= 0 || point.y <= 0)
+	if (point.z <= 0.1 || point.x <= 0 || point.y <= 0)
 		return ;
 	point_size = PERSPECTIVE_FACTOR * (1 / point.w);
-	color = hsv_to_argb((t_hsv){(int)(z * 10) % 360, 255, 255});
+	color = hsv_to_argb((t_hsv){(int)(-z * 20 + data->color) % 360, 1, 1});
 	img_set_disk(color, (t_vect2){point.x, point.y}, point_size, data);
 }

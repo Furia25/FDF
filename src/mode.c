@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mode.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:15:45 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 03:32:22 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 19:22:30 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	set_points(t_list *lst, t_fdf_data *data)
+void	rasterize_wireframe(t_list *lst, t_fdf_data *data)
 {
 	int		index;
 	t_vect3	*array;
@@ -38,7 +38,7 @@ void	set_points(t_list *lst, t_fdf_data *data)
 	}
 }
 
-void	triangle_test(t_fdf_data *data)
+void	rasterize_tri(t_fdf_data *data)
 {
 	t_triangle3	*mesh;
 	t_triangle2	temp;
@@ -54,9 +54,35 @@ void	triangle_test(t_fdf_data *data)
 			project_point_cam(mesh[i].b, data->camera),
 			project_point_cam(mesh[i].c, data->camera),
 		};
-		a = -mesh[i].a.y + -mesh[i].b.y + -mesh[i].c.y / 3;
+		a = (-mesh[i].a.y + -mesh[i].b.y + -mesh[i].c.y) * data->color;
 		img_rasterize_triangle(
-			temp, (t_argb){0, a * 10 + 200, a * 15 - 255, 255}, data);
+			temp,
+			(t_argb){\
+				0, 230 - a, 40 + mesh[i].a.x, 240 + a * (data->color / 7)
+		}, data);
 		i++;
+	}
+}
+
+void	rasterize_points(t_list *lst, t_fdf_data *data)
+{
+	int		index;
+	t_vect3	*array;
+	t_argb	color;
+
+	while (lst)
+	{
+		array = (t_vect3 *) lst->content;
+		index = -1;
+		while (array[++index].x != -1)
+		{
+			if (!is_point_in_cameradir(
+					data->camera, array[index], data->camera->fov))
+				continue ;
+			color = (t_argb){0, 0, 0, 0};
+			img_set_point(color, project_point_cam(
+					array[index], data->camera), array[index].y, data);
+		}
+		lst = lst->next;
 	}
 }
