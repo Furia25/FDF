@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:15:45 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 19:29:01 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 03:32:22 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	set_points(t_list *lst, t_fdf_data *data)
 		index = -1;
 		while (array[++index].x != -1)
 		{
-			if (!is_point_in_cameradir(data->camera, array[index], data->camera->fov))
+			if (!is_point_in_cameradir(
+					data->camera, array[index], data->camera->fov))
 				continue ;
 			color = (t_argb){0, 0, 0, 0};
 			if (array[index + 1].x != -1)
@@ -54,7 +55,8 @@ void	triangle_test(t_fdf_data *data)
 			project_point_cam(mesh[i].c, data->camera),
 		};
 		a = -mesh[i].a.y + -mesh[i].b.y + -mesh[i].c.y / 3;
-		img_rasterize_triangle(temp, (t_argb){0, a * 10 + 200, a * 15 - 255, 255}, data);
+		img_rasterize_triangle(
+			temp, (t_argb){0, a * 10 + 200, a * 15 - 255, 255}, data);
 		i++;
 	}
 }

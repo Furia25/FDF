@@ -54,7 +54,7 @@ int	is_point_in_triangle(float x, float y, t_triangle2 triangle)
 	float	gamma;
 
 	alpha = ((triangle.b.y - triangle.c.y) * (x - triangle.c.x) + \
-			(triangle.c.x - triangle.b.x) * (y - triangle.c.y)) /\
+			(triangle.c.x - triangle.b.x) * (y - triangle.c.y)) / \
 			((triangle.b.y - triangle.c.y) * (triangle.a.x - triangle.c.x) \
 			+ (triangle.c.x - triangle.b.x) * \
 			(triangle.a.y - triangle.c.y));
@@ -90,23 +90,6 @@ t_vect2	interpolate_zw(float x, float y, t_triangle2 triangle)
 	result.y = (alpha * triangle.a.w + beta * \
 		triangle.b.w + gamma * triangle.c.w);
 	return (result);
-}
-
-int	frustum(t_triangle2 tri, t_fdf_data *data)
-{
-	int score;
-	int	width;
-	int	height;
-	int	min;
-
-	min = 0 - FRUSTUM_CULLING_PRECISION;
-	width = data->width + FRUSTUM_CULLING_PRECISION;
-	height = data->height + FRUSTUM_CULLING_PRECISION;
-	score = 0;
-	score += (tri.a.x < min || tri.a.x >= width || tri.a.y < min || tri.a.y >= height);
-	score += (tri.b.x < min || tri.b.x >= width || tri.b.y < min || tri.b.y >= height);
-	score += (tri.c.x < min || tri.c.x >= width || tri.c.y < min || tri.c.y >= height);
-	return (score > 2);
 }
 
 void	img_rasterize_triangle(t_triangle2 tri, t_argb c, t_fdf_data *data)

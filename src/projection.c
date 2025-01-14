@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 17:21:39 by val               #+#    #+#             */
-/*   Updated: 2025/01/13 23:12:27 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:48:30 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_matrix4	get_perspective_matrix(float f, float aspect, float near, float far)
 		}
 		i++;
 	}
-	printf("%f", aspect);
 	tan_half_fov = tanf(f * 0.5f);
 	mat.m[0][0] = 1.0f / (aspect * tan_half_fov);
 	mat.m[1][1] = 1.0f / tan_half_fov;
@@ -112,7 +111,6 @@ t_vect4	project_point_cam(t_vect3 p, t_camera *cam)
 {
 	t_vect4	point;
 	t_vect4	projected;
-	//float	r;
 
 	point = vec3_to_homogeneous(p);
 	projected = vec4_multiply_matrix4(cam->m_final, point);
@@ -124,7 +122,6 @@ t_vect4	project_point_cam(t_vect3 p, t_camera *cam)
 	}
 	if (projected.w < 0)
 		return ((t_vect4){-1, -1, -1, -1});
-	//r = cam->width / cam->height;
 	projected.x = (int)((-projected.x + 1.0f) * cam->width * 0.5);
 	projected.y = (int)((-projected.y + 1.0f) * cam->height * 0.5);
 	return (projected);

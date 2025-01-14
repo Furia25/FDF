@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 00:12:59 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:56:39 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ typedef struct s_fdf_data
 # define CAMERA_DEFAULT_SPEED	0.33
 # define CAMERA_DEFAULT_SENSITIVITY 1
 
-void			test(void *param);
 t_matrix4		get_perspective_matrix(float f, float a, float near, float far);
 t_matrix4		get_view_matrix(t_vect3 cam_pos, t_vect3 dir, t_vect3 right);
 t_matrix4		multiply_matrix4(t_matrix4 mat1, t_matrix4 mat2);
@@ -180,6 +179,7 @@ void			set_points(t_list *lst, t_fdf_data *data);
 void			*generate_screen(t_fdf_data *data);
 void			triangle_test(t_fdf_data *data);
 //
+int				frustum(t_triangle2 tri, t_fdf_data *data);
 void			img_rasterize_triangle(t_triangle2 t, t_argb c, t_fdf_data *d);
 void			img_draw_screen(t_image_data *img, t_fdf_data *data);
 void			img_draw_pixel(t_argb argb, int x, int y, t_image_data *img);
@@ -213,6 +213,7 @@ int				cam_move_up(float speed, t_camera *cam);
 int				cam_rotate(t_camera *cam, float yaw, float pitch, float roll);
 
 //
+int				count_tri3(t_list *lst);
 float			fast_sqrt(float number);
 float			dot_product(t_vect3 a, t_vect3 b);
 t_vect3			add(t_vect3 a, t_vect3 b);

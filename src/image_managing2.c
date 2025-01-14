@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image_managing2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 00:26:44 by val               #+#    #+#             */
-/*   Updated: 2025/01/13 19:29:20 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 03:50:01 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@ void	img_set_bsegment(t_argb color, t_vect3 a, t_vect3 b, t_fdf_data *data)
 	int		steps;
 	int		index;
 	float	dist;
-	t_vect3 diff;
-	t_vect3 interpolated;
+	t_vect3	diff;
+	t_vect3	interpolated;
 
 	dist = vec3_distance(a, data->camera->pos);
 	diff = subtract(b, a);
-	steps = (int)(SEGMENT_PRECISION * fmaxf(0.2f, vec3_length(diff) / 50.0f) * fmaxf(0.3f, expf(-dist / 100.0f)));
+	steps = (int)(SEGMENT_PRECISION * fmaxf(0.2f, vec3_length(diff) / 50.0f) \
+		* fmaxf(0.3f, expf(-dist / 100.0f)));
 	if (steps < 1)
 		steps = 1;
 	index = 0;
@@ -57,7 +58,7 @@ void	img_set_disk(t_argb color, t_vect2 cord, int radius, t_fdf_data *data)
 	}
 }
 
-void	img_set_circle(t_argb color, t_vect2 coord, int radius, t_fdf_data *data)
+void	img_set_circle(t_argb color, t_vect2 co, int radius, t_fdf_data *data)
 {
 	float		angle;
 	int			index;
@@ -66,8 +67,8 @@ void	img_set_circle(t_argb color, t_vect2 coord, int radius, t_fdf_data *data)
 	while (index < CIRCLE_PRECISION)
 	{
 		angle = 2 * M_PI * index / CIRCLE_PRECISION;
-		img_set_pixel(color, coord.x + radius * cos(angle), \
-			coord.y + radius * sin(angle), data);
+		img_set_pixel(color, co.x + radius * cos(angle), \
+			co.y + radius * sin(angle), data);
 		index++;
 	}
 }
@@ -76,9 +77,9 @@ void	img_set_point(t_argb color, t_vect4 point, float z, t_fdf_data *data)
 {
 	float	point_size;
 
-	if (point.z <= 0 || point.x <= 0 ||  point.y <= 0)
+	if (point.z <= 0 || point.x <= 0 || point.y <= 0)
 		return ;
-	point_size = PERSPECTIVE_FACTOR * (1 /point.w);
-	color = hsv_to_argb((t_hsv){(int) (z * 10) % 360, 255, 255});
+	point_size = PERSPECTIVE_FACTOR * (1 / point.w);
+	color = hsv_to_argb((t_hsv){(int)(z * 10) % 360, 255, 255});
 	img_set_disk(color, (t_vect2){point.x, point.y}, point_size, data);
 }

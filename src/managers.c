@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
-/*   Updated: 2025/01/13 23:14:20 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:40:27 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	start_managers(t_fdf_data *data)
 {
+	mlx_do_key_autorepeatoff(data->mlx);
 	mlx_hook(data->window, KeyPress, KeyPressMask, key_pressed, data);
 	mlx_hook(data->window, KeyRelease, KeyReleaseMask, key_released, data);
 	mlx_hook(data->window, DestroyNotify, 0, close_window, data);
@@ -31,7 +32,8 @@ int	close_window(t_fdf_data *data)
 		mlx_destroy_image(data->mlx, data->image);
 	if (data->window)
 		mlx_destroy_window(data->mlx, data->window);
-	if (data->mlx){
+	if (data->mlx)
+	{
 		mlx_destroy_display(data->mlx);
 		free(data->mlx);
 	}
@@ -54,13 +56,14 @@ int	do_loop(t_fdf_data *data)
 		generate_screen(data);
 		if (!data->image)
 			return (close_window(data));
-		memset_fast(data->screen_buffer, 0, data->width * data->height * sizeof(t_argb));
-		memset_fast(data->z_buffer, 5000, data->width * data->height * sizeof(float));
+		memset_fast(data->screen_buffer, 0, \
+			data->width * data->height * sizeof(t_argb));
+		memset_fast(data->z_buffer, \
+			5000, data->width * data->height * sizeof(float));
 		if (data->mode == -1)
 			set_points(data->points, data);
 		else
 			triangle_test(data);
-		img_set_disk((t_argb){0, 255, 255, 255}, (t_vect2){1200, 700}, 10, data);
 		img_draw_screen(&data->image_data, data);
 		mlx_put_image_to_window(data->mlx, data->window, data->image, 0, 0);
 	}

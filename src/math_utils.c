@@ -39,9 +39,9 @@ float	normalize_angle(float angle)
 
 int	is_point_in_cameradir(t_camera *cam, t_vect3 point, float fov)
 {
-	float fov_cos;
-	float dot;
-	t_vect3 to_point;
+	float	fov_cos;
+	float	dot;
+	t_vect3	to_point;
 
 	fov_cos = cosf((fov * 0.5f) * (M_PI / 180.0f));
 	to_point = subtract(point, cam->pos);
@@ -51,22 +51,19 @@ int	is_point_in_cameradir(t_camera *cam, t_vect3 point, float fov)
 
 float	fast_sqrt(float number)
 {
-	union {
-		float	f;
-		int32_t	i;
-	} u_conv;
+	int32_t	i;
 	float	x2;
 	float	y;
+	char	*ptr;
 
 	if (number <= 0)
 		return (0);
-
 	x2 = number * 0.5f;
-	u_conv.f = number;
-
-	u_conv.i = 0x5f3759df - (u_conv.i >> 1);
-	y = u_conv.f;
-
+	ptr = (char *)&number;
+	i = *((int32_t *)ptr);
+	i = 0x5f3759df - (i >> 1);
+	ptr = (char *)&i;
+	y = *((float *)ptr);
 	y = y * (1.5f - (x2 * y * y));
 	return (1.0f / y);
 }

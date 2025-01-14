@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:33:25 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 03:28:27 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:33:48 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	img_draw_pixel(t_argb argb, int x, int y, t_image_data *img)
 {
 	int	pixel;
 	int	color;
-	
+
 	if (x < 0 || x > img->width || y < 0 || y > img->height)
 		return ;
 	pixel = ((int) y * img->size_line) + ((int) x * 4);
@@ -70,17 +70,17 @@ void	img_set_pixel(t_argb color, int x, int y, t_fdf_data *data)
 	data->screen_buffer[y * data->width + x] = color;
 }
 
-void	img_set_pixel_zbuffer(t_argb color, t_vect4 point, t_fdf_data *data)
+void	img_set_pixel_zbuffer(t_argb color, t_vect4 p, t_fdf_data *data)
 {
 	float	depth;
 
-	if (point.x < 0 || point.x >= data->width || point.y < 0 || point.y >= data->height)
+	if (p.x < 0 || p.x >= data->width || p.y < 0 || p.y >= data->height)
 		return ;
-	depth = point.z / point.w;
-	if (depth < data->z_buffer[(int)(point.y * data->width + point.x)])
+	depth = p.z / p.w;
+	if (depth < data->z_buffer[(int)(p.y * data->width + p.x)])
 		return ;
-	data->screen_buffer[(int)(point.y * data->width + point.x)] = color;
-	data->z_buffer[(int)(point.y * data->width + point.x)] = depth;
+	data->screen_buffer[(int)(p.y * data->width + p.x)] = color;
+	data->z_buffer[(int)(p.y * data->width + p.x)] = depth;
 }
 
 void	img_set_rect(t_argb color, t_vect2 co, t_vect2 size, t_fdf_data *data)

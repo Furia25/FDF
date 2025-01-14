@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 01:06:36 by val               #+#    #+#             */
-/*   Updated: 2025/01/11 16:20:31 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:45:47 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ float	vec3_distance(t_vect3 a, t_vect3 b)
 
 float	vec3_length(t_vect3 v)
 {
-    return (fast_sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
+	return (fast_sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
 t_vect3	normalize(t_vect3 v)
@@ -40,18 +40,15 @@ t_vect3	normalize(t_vect3 v)
 
 t_vect3	vec3_rotate(t_quaternion q, t_vect3 v)
 {
-	t_quaternion q_result;
-	
+	t_quaternion	q_result;
+
 	q = quaternion_normalize(q);
-	q_result = quaternion_multiply( \
-		quaternion_multiply(q,\
-			(t_quaternion){0, v.x, v.y, v.z}\
-			), \
-		quaternion_conjugate(q));
+	q_result = quaternion_multiply(quaternion_multiply(q, \
+		(t_quaternion){0, v.x, v.y, v.z}), quaternion_conjugate(q));
 	return ((t_vect3){q_result.x, q_result.y, q_result.z});
 }
 
 t_vect4	vec3_to_homogeneous(t_vect3 v)
 {
-    return ((t_vect4){v.x, v.y, v.z, 1.0f});
+	return ((t_vect4){v.x, v.y, v.z, 1.0f});
 }

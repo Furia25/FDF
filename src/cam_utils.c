@@ -6,7 +6,7 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:06:43 by val               #+#    #+#             */
-/*   Updated: 2025/01/13 23:04:55 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:28:10 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	cam_rotate(t_camera *camera, float yaw, float pitch, float roll)
 	t_quaternion	yaw_q;
 	t_quaternion	roll_q;
 	t_quaternion	combined_q;
-	
+
 	pitch_q = quaternion_from_axis_angle(camera->up, pitch);
 	yaw_q = quaternion_from_axis_angle(camera->right, yaw);
 	combined_q = quaternion_multiply(yaw_q, pitch_q);
@@ -27,14 +27,14 @@ int	cam_rotate(t_camera *camera, float yaw, float pitch, float roll)
 	camera->dir = vec3_rotate(combined_q, camera->dir);
 	camera->dir = normalize(camera->dir);
 	camera->right = cross_product(camera->dir, (t_vect3){0, 1, 0});
-    camera->right = normalize(camera->right);
+	camera->right = normalize(camera->right);
 	camera->up = cross_product(camera->right, camera->dir);
-    camera->up = normalize(camera->up);
+	camera->up = normalize(camera->up);
 	cam_update(camera);
 	return (1);
 }
 
-t_camera	*init_camera(float wwindow, float hwindow)
+t_camera	*init_camera(float width, float height)
 {
 	t_camera	*camera;
 
@@ -47,14 +47,15 @@ t_camera	*init_camera(float wwindow, float hwindow)
 		CAMERA_DEFAULT_Z
 	};
 	camera->dir = (t_vect3){0, 0, -1};
-	camera->width = wwindow;
-	camera->height = hwindow;
+	camera->width = width;
+	camera->height = height;
 	camera->right = cross_product(camera->dir, (t_vect3){0, 1, 0});
 	camera->right = normalize(camera->right);
 	camera->up = cross_product(camera->right, camera->dir);
-    camera->up = normalize(camera->up);
+	camera->up = normalize(camera->up);
 	camera->fov = CAMERA_DEFAULT_FOCAL;
-	camera->m_perspective = get_perspective_matrix(camera->fov, wwindow / hwindow, 0.1f, 100.0f);
+	camera->m_perspective = get_perspective_matrix(
+			camera->fov, width / height, 0.1f, 100.0f);
 	cam_update(camera);
 	camera->spd = CAMERA_DEFAULT_SPEED;
 	camera->sensivity = CAMERA_DEFAULT_SENSITIVITY;

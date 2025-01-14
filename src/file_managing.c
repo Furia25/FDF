@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_managing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/13 15:54:38 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/14 03:33:15 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,23 @@ void	free_chartab(char **tab)
 static t_vect3	*parse_line(char *line, int y)
 {
 	char		**words;
-	t_vect3	*result;
-	int		index;
+	t_vect3		*result;
+	int			index;
 
 	if (!line)
 		return (NULL);
 	words = ft_split(line, FDF_FILE_DELIMITER);
 	if (!words)
 		return (free(line), NULL);
-	result = ft_calloc(count_words(line, FDF_FILE_DELIMITER) + 1, sizeof(t_vect3));
+	result = ft_calloc(
+			count_words(line, FDF_FILE_DELIMITER) + 1, sizeof(t_vect3));
 	if (!result)
 		return (free_chartab(words), free(line), NULL);
 	index = 0;
 	while (words[index])
 	{
-		result[index] = (t_vect3){(float)y, -(((float) ft_atoi(words[index])) / 2), -index};
+		result[index] = (t_vect3){
+			(float)y, -(((float) ft_atoi(words[index])) / 2), -index};
 		index++;
 	}
 	result[index] = (t_vect3){-1, -1, -1};

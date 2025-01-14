@@ -6,53 +6,14 @@
 /*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 02:32:01 by val              ###   ########.fr       */
+/*   Updated: 2025/01/14 03:54:14 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <fcntl.h>
 
-/* void	test(void *param)
-{
-	int	index;
-	t_vect3	*lst;
-
-	lst = (t_vect3 *) param;
-	index = 0;
-	while (lst[index].x != -1)
-	{
-		printf("| X : %.2f, Y : %.2f, Z : %.2f | ", lst[index].x, lst[index].y, lst[index].z);
-		index++;
-	}
-	printf("\n");
-} */
-
-int	count_triangles(t_list *lst)
-{
-	t_vect3		*next_line;
-	int			count;
-	int			index;
-
-	count = 0;
-	while (lst)
-	{
-		index = -1;
-		while (((t_vect3 *) lst->content)[++index].x != -1)
-		{
-			if (!lst->next || ((t_vect3 *) lst->content)[index + 1].x == -1)
-				continue ;
-			next_line = (t_vect3 *) lst->next->content;
-			if (next_line[index].x == -1 || next_line[index + 1].x == -1)
-				continue ;
-			count++;
-		}
-		lst = lst->next;
-	}
-	return (count * 2);
-}
-
-void create_subtri(t_triangle3 *mesh, size_t *tri, t_vect3 *vec, t_vect3 *next)
+void	create_subtri(t_triangle3 *mesh, size_t *i, t_vect3 *vec, t_vect3 *next)
 {
 	t_vect3	top_left;
 	t_vect3	top_right;
@@ -63,10 +24,10 @@ void create_subtri(t_triangle3 *mesh, size_t *tri, t_vect3 *vec, t_vect3 *next)
 	top_right = *(vec + 1);
 	bot_left = *next;
 	bot_right = *(next + 1);
-	mesh[*tri] = (t_triangle3){top_left, top_right, bot_left};
-	*tri += 1;
-	mesh[*tri] = (t_triangle3){top_right, bot_right, bot_left};
-	*tri += 1;
+	mesh[*i] = (t_triangle3){top_left, top_right, bot_left};
+	*i += 1;
+	mesh[*i] = (t_triangle3){top_right, bot_right, bot_left};
+	*i += 1;
 	return ;
 }
 
@@ -134,7 +95,7 @@ int	init_data(t_fdf_data *data, int fd, char *title)
 		return (close_window(data));
 	generate_screen(data);
 	data->points = read_file(fd);
-	data->mesh = ft_calloc(count_triangles(data->points) + 1, sizeof(t_triangle3));
+	data->mesh = ft_calloc(count_tri3(data->points) + 1, sizeof(t_triangle3));
 	if (!data->image || !data->points || !data->mesh)
 		return (close_window(data));
 	generate_mesh(data->mesh, data->points);
@@ -165,5 +126,3 @@ int	main(int argc, char **argv)
 	mlx_loop(data->mlx);
 	return (EXIT_SUCCESS);
 }
-
-//cc *.c -Lminilibx-linux -lmlx -lXext -lm -lX11 -Iminilibx-linux -Llibft -lft -O3 -Werror -Wextra -Wall
