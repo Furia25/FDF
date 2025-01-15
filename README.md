@@ -37,8 +37,7 @@
 
 ## 🚀 Usage
 
-**Many "Constants" are defined in the includes/fdf.h header file.Feel free to change them :).
-Except FOV because its actually broken!**
+**Many "Constants" are defined in the includes/fdf.h header file. Feel free to change them :), except FOV because its actually broken!**
 
 ### 🔨 Compilation
 
