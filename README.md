@@ -64,7 +64,7 @@ Example:
 ```
 
 
-## <span style="color:green;">License</span>
+### 📜 License
 
 This project is licensed under the [MIT License](LICENSE).
 
