@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 15:39:28 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/07 17:07:54 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/15 21:45:34 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ size_t	ft_strlcpy(char *dest, char *src, size_t size);
 //
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strend(char *str, char *suffix);
 int		count_words(const char *str, char c);
 int		ft_atoi(const char *nptr);
 int		ft_lstsize(t_list *lst);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_managing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 17:13:03 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/15 21:39:35 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 int	try_open_file(int *fd, char *file_path)
 {
+	if (!ft_strend(file_path, ".fdf"))
+		return (0);
 	*fd = open(file_path, O_RDONLY);
 	if (*fd == -1)
 		return (0);

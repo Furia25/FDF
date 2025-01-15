@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   managers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
-/*   Updated: 2025/01/14 19:23:24 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/01/15 21:50:46 by val              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/*mlx_set_font(data->mlx, data->window, \
+	"-misc-fixed-bold-r-normal--18-120-100-100-c-90-iso8859-1");*/
+
 void	start_managers(t_fdf_data *data)
 {
-	mlx_set_font(data->mlx, data->window, \
-		"-misc-fixed-bold-r-normal--18-120-100-100-c-90-iso8859-1");
 	mlx_mouse_hide(data->mlx, data->window);
 	mlx_mouse_move(data->mlx, data->window, data->width / 2, data->height / 2);
 	mlx_do_key_autorepeatoff(data->mlx);
