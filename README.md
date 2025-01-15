@@ -19,22 +19,23 @@ Projected fdf means real 3D, which means different types of rasterization!
 The cam and everything in the mesh are really simulated in 3D which could could some performance issues because of the lack of optimisations.
 
 3 Dislay Mode
-- Mode 0: Polygons
-- Mode 1: Points
-- Mode 2: FDF / Wireframe
+	Mode 0: Polygons
+	Mode 1: Points
+	Mode 2: FDF / Wireframe
+
 
 ![image](https://github.com/user-attachments/assets/3e6ca99b-00a9-4ab4-8871-c7a264ea58d6)
+Note > Polygons can be really lag-free if you are a far away from them. lol.
+---
 ![image](https://github.com/user-attachments/assets/f1983bd2-d323-4bb6-96f8-4af8088b27f5)
+---
 ![image](https://github.com/user-attachments/assets/155f49fd-074c-4736-b1be-e8c6b0f055d7)
-
-Highlight the unique selling points of your project.
+Note > I am currently drawing lines by interpolating many points and then projecting them, so its not the most efficient way to do this, so a replacement with Bresenham's algorithm is in the way!
 
 ## <span style="color:green;">Usage</span>
 
-To use it :
-
-  1 - Compile it with the makefile provided.
-	2 - Execute the binary created with a file in argument
+1 - Compile it with the makefile provided.
+2 - Execute the binary created with a file in argument
 
 ```bash
 ./fdf test_maps/mars.fdf
