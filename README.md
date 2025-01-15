@@ -13,7 +13,7 @@
 
 ## 📖 Introduction
 
-**FIL DE FER - WIREFRAME** is a project focused on rendering 3D wireframe models from `.fdf` point matrix files.
+**FIL DE FER - WIREFRAME** is a project focused on rendering 3D wireframe models from `.fdf` matrix of points files.
 
 ---
 
