@@ -63,8 +63,9 @@ Example:
 ./fdf test_maps/mars.fdf
 ```
 
+---
 
-### 📜 License
+## 📜 License
 
 This project is licensed under the [MIT License](LICENSE).
 
