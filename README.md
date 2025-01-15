@@ -13,20 +13,20 @@
 
 ## 📖 Introduction
 
-**FIL DE FER - WIREFRAME** is a project focused on rendering 3D wireframe models from `.fdf` files.
+**FIL DE FER - WIREFRAME** is a project focused on rendering 3D wireframe models from `.fdf` point matrix files.
 
 ---
 
 ## ✨ Unique Features
 
-- **True 3D Projection**: The `fdf` projection simulates real 3D, complete with various types of rasterization. However, this realism might introduce performance issues due to the lack of optimizations.
+- **True 3D Projection**: The `fdf` projection simulates real 3D, complete with various types of rasterization. However, some modes might introduce performance issues due to the lack of optimizations.
 - **Three Display Modes**:
   - **Mode 0**: Polygons 🟩
   - **Mode 1**: Points 🔵
   - **Mode 2**: FDF / Wireframe 🕸️
 
 ![Mode 0 - Polygons](https://github.com/user-attachments/assets/3e6ca99b-00a9-4ab4-8871-c7a264ea58d6)
-> **Note**: Polygons are lag-free if you're far away from them. 😄
+> **Note**: Polygons are lag-free if you're far away from them. lol.
 
 ![Mode 1 - Points](https://github.com/user-attachments/assets/f1983bd2-d323-4bb6-96f8-4af8088b27f5)
 
@@ -37,12 +37,29 @@
 
 ## 🚀 Usage
 
-1. **Compile** the project using the provided Makefile:
-2 - Execute the binary created with a file in argument
+### 🔨 Compilation
+
+To compile the project, use the provided Makefile:
+Ensure you have the required libraries and dependencies installed.
+
+```bash
+make
+```
+
+### ▶️ Running the Program
+
+Run the generated binary and provide a `.fdf` file as an argument:
+
+```bash
+./fdf <path_to_fdf_file>
+```
+
+Example:
 
 ```bash
 ./fdf test_maps/mars.fdf
 ```
+
 
 ## <span style="color:green;">License</span>
 
