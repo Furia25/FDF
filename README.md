@@ -1,40 +1,43 @@
-# <span style="color:blue;">FDF - Wireframe</span>
+# 🌐 FDF - Wireframe
 
 ![Project Logo](https://github.com/user-attachments/assets/528eccd4-228c-46a0-9619-6b8a35bf706c)
 
-## <span style="color:green;">Table of Contents</span>
-- [Introduction](#introduction)
-- [Uniques Features](#features)
-- [License](#license)
+## 📋 Table of Contents
+
+- [📖 Introduction](#introduction)
+- [✨ Unique Features](#unique-features)
+- [🚀 Usage](#usage)
+- [📜 License](#license)
 
 ---
 
-## <span style="color:green;">Introduction</span>
+## 📖 Introduction
 
-FIL DE FER - WIREFRAME !
+**FIL DE FER - WIREFRAME** is a project focused on rendering 3D wireframe models from `.fdf` files.
 
-## <span style="color:green;">Uniques Features</span>
-
-Projected fdf means real 3D, which means different types of rasterization!
-The cam and everything in the mesh are really simulated in 3D which could could some performance issues because of the lack of optimisations.
-
-3 Dislay Mode
-	Mode 0: Polygons
-	Mode 1: Points
-	Mode 2: FDF / Wireframe
-
-
-![image](https://github.com/user-attachments/assets/3e6ca99b-00a9-4ab4-8871-c7a264ea58d6)
-Note > Polygons can be really lag-free if you are a far away from them. lol.
 ---
-![image](https://github.com/user-attachments/assets/f1983bd2-d323-4bb6-96f8-4af8088b27f5)
+
+## ✨ Unique Features
+
+- **True 3D Projection**: The `fdf` projection simulates real 3D, complete with various types of rasterization. However, this realism might introduce performance issues due to the lack of optimizations.
+- **Three Display Modes**:
+  - **Mode 0**: Polygons 🟩
+  - **Mode 1**: Points 🔵
+  - **Mode 2**: FDF / Wireframe 🕸️
+
+![Mode 0 - Polygons](https://github.com/user-attachments/assets/3e6ca99b-00a9-4ab4-8871-c7a264ea58d6)
+> **Note**: Polygons are lag-free if you're far away from them. 😄
+
+![Mode 1 - Points](https://github.com/user-attachments/assets/f1983bd2-d323-4bb6-96f8-4af8088b27f5)
+
+![Mode 2 - Wireframe](https://github.com/user-attachments/assets/155f49fd-074c-4736-b1be-e8c6b0f055d7)
+> **Note**: Lines are currently drawn by interpolating points and then projecting them, which is not the most efficient method. A replacement using Bresenham's algorithm is on the way! 🛠️
+
 ---
-![image](https://github.com/user-attachments/assets/155f49fd-074c-4736-b1be-e8c6b0f055d7)
-Note > I am currently drawing lines by interpolating many points and then projecting them, so its not the most efficient way to do this, so a replacement with Bresenham's algorithm is in the way!
 
-## <span style="color:green;">Usage</span>
+## 🚀 Usage
 
-1 - Compile it with the makefile provided.
+1. **Compile** the project using the provided Makefile:
 2 - Execute the binary created with a file in argument
 
 ```bash
