@@ -17,7 +17,7 @@
 
 ---
 
-## ✨ Unique Features
+## <a name="unique-features">✨ Unique Features</a>
 
 - **True 3D Projection**: The `fdf` projection simulates real 3D, complete with various types of rasterization. However, some modes might introduce performance issues due to the lack of optimizations.
 - **Three Display Modes**:
@@ -35,7 +35,7 @@
 
 ---
 
-## 🚀 Usage
+## <a name="usage">🚀 Usage</a>
 
 **Many "Constants" are defined in the includes/fdf.h header file. Feel free to change them :), except FOV because its actually broken!**
 
@@ -64,7 +64,7 @@ Example:
 
 ---
 
-## 📜 License
+## <a name="license">📜 License</a>
 
 This project is licensed under the [MIT License](LICENSE).
 
