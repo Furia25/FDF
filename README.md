@@ -4,14 +4,14 @@
 
 ## 📋 Table of Contents
 
-- [📖 Introduction](#-📖-introduction)
+- [📖 Introduction](#introduction)
 - [✨ Unique Features](#✨unique-features)
 - [🚀 Usage](#usage)
 - [📜 License](#license)
 
 ---
 
-## 📖 Introduction
+## <a name="introduction">📖 Introduction</a>
 
 **FIL DE FER - WIREFRAME** is a project focused on rendering 3D wireframe models from `.fdf` matrix of points files.
 
