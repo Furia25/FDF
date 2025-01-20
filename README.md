@@ -5,7 +5,7 @@
 ## 📋 Table of Contents
 
 - [📖 Introduction](#introduction)
-- [✨ Unique Features](#✨unique-features)
+- [✨ Unique Features](#unique-features)
 - [🚀 Usage](#usage)
 - [📜 License](#license)
 
