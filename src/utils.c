@@ -6,12 +6,39 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:44:13 by val               #+#    #+#             */
-/*   Updated: 2025/01/14 15:56:41 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:49:29 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdint.h>
+
+int	close_window(t_fdf_data *data)
+{
+	if (data->file_fd != -1)
+		close(data->file_fd);
+	mlx_loop_end(data->mlx);
+	ft_lstclear(&data->points, free);
+	free(data->screen_buffer);
+	free(data->z_buffer);
+	if (data->mesh)
+		free(data->mesh);
+	if (data->image)
+		mlx_destroy_image(data->mlx, data->image);
+	if (data->window)
+		mlx_destroy_window(data->mlx, data->window);
+	if (data->mlx)
+	{
+		mlx_destroy_display(data->mlx);
+		free(data->mlx);
+	}
+	free(data->camera);
+	free(data->title);
+	free(data);
+	ft_printf("\033[1;31mEXITING PROGRAM\033[0m\n");
+	exit(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
+}
 
 void	*memset_fast(void *ptr, int value, size_t num)
 {
@@ -79,28 +106,3 @@ int	count_tri3(t_list *lst)
 	}
 	return (count * 2);
 }
-
-/* int	is_point_segment(t_vect4 a, t_vect4 b, t_vect2 p)
-{
-	float	cross_product;
-
-	cross_product = (p.x - a.x) * (b.y - a.y) - (p.y - a.y) * (b.x - a.x);
-	if (cross_product != 0)
-		return (0);
-	if ((p.x < a.x && p.x < b.x) || (p.x > a.x && p.x > b.x))
-		return (0);
-	if ((p.y < a.y && p.y < b.y) || (p.y > a.y && p.y > b.y))
-		return (0);
-	return (1);
-}
-
-int is_point_tricircum(t_vect2 p, t_triangle2 tri)
-{
-	int	score;
-
-	score = 0;
-	score += is_point_segment(tri.a, tri.b, p);
-	score += is_point_segment(tri.b, tri.c, p);
-	score += is_point_segment(tri.c, tri.a, p);
-	return (score == 1);
-} */

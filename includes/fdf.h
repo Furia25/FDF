@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/02/03 16:12:45 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:49:59 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void			rasterize_points(t_list *lst, t_fdf_data *data);
 int				frustum(t_triangle2 tri, t_fdf_data *data);
 void			img_rasterize_segtri(t_triangle2 tri, t_argb c, t_fdf_data *d);
 void			img_rasterize_triangle(t_triangle2 t, t_argb c, t_fdf_data *d);
-void			img_draw_jointext(char *str1, char *str2, t_fdf_data *data);
+void			img_draw_jointext(t_vect2 c, char *s1, char *s2, t_fdf_data *d);
 void			img_draw_screen(t_image_data *img, t_fdf_data *data);
 void			img_draw_pixel(t_argb argb, int x, int y, t_image_data *img);
 void			img_set_pixel(t_argb c, int x, int y, t_fdf_data *data);
@@ -211,6 +211,7 @@ void			start_managers(t_fdf_data *data);
 int				close_window(t_fdf_data *data);
 int				do_loop(t_fdf_data *param);
 //
+int				keys_parse(int keycode, t_fdf_data *data);
 int				key_pressed(int keycode, t_fdf_data *data);
 int				key_released(int keycode, t_fdf_data *data);
 int				movement_keys(int keycode, t_fdf_data *data);

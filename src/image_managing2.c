@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 00:26:44 by val               #+#    #+#             */
-/*   Updated: 2025/02/03 16:12:51 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:45:23 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ void	img_set_point(t_argb color, t_vect4 point, float z, t_fdf_data *data)
 	img_set_disk(color, (t_vect2){point.x, point.y}, point_size, data);
 }
 
-void	img_draw_jointext(char *str1, char *str2, t_fdf_data *data)
+void	img_draw_jointext(t_vect2 co, char *str1, char *str2, t_fdf_data *data)
 {
 	char	*temp;
 
 	temp = ft_strjoin(str1, str2);
 	if (temp)
-		mlx_string_put(data->mlx, data->window, 10, 30, 0xFFFFFF, temp);
+		mlx_string_put(data->mlx, data->window, co.x, co.y, 0xFFFFFF, temp);
 	free(temp);
 }

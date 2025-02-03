@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
-/*   Updated: 2025/02/03 16:15:12 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:49:16 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,6 @@ void	start_managers(t_fdf_data *data)
 	mlx_hook(data->window, KeyRelease, KeyReleaseMask, key_released, data);
 	mlx_hook(data->window, DestroyNotify, 0, close_window, data);
 	mlx_loop_hook(data->mlx, do_loop, data);
-}
-
-int	close_window(t_fdf_data *data)
-{
-	if (data->file_fd != -1)
-		close(data->file_fd);
-	mlx_loop_end(data->mlx);
-	ft_lstclear(&data->points, free);
-	free(data->screen_buffer);
-	free(data->z_buffer);
-	if (data->mesh)
-		free(data->mesh);
-	if (data->image)
-		mlx_destroy_image(data->mlx, data->image);
-	if (data->window)
-		mlx_destroy_window(data->mlx, data->window);
-	if (data->mlx)
-	{
-		mlx_destroy_display(data->mlx);
-		free(data->mlx);
-	}
-	free(data->camera);
-	free(data->title);
-	free(data);
-	ft_printf("\033[1;31mEXITING PROGRAM\033[0m\n");
-	exit(EXIT_SUCCESS);
-	return (EXIT_SUCCESS);
 }
 
 int	mouse_manager(int x, int y, t_fdf_data *data)
@@ -85,6 +58,22 @@ void	mode_draw(t_fdf_data *data)
 		rasterize_points(data->points, data);
 }
 
+int	key_manager(int lastkey, t_fdf_data *data)
+{
+	if (lastkey == XK_Escape)
+		return (close_window(data), 1);
+	if (lastkey != -1)
+	{
+		if (!movement_keys(lastkey, data))
+			data->camera->spd = CAMERA_DEFAULT_SPEED;
+		camera_keys(lastkey, data);
+		if (lastkey >= XK_1 && lastkey <= XK_9)
+			if (!parse_keys(lastkey, data))
+				return (close_window(data), 1);
+	}
+	return (1);
+}
+
 int	do_loop(t_fdf_data *data)
 {
 	char	*temp;
@@ -104,10 +93,11 @@ int	do_loop(t_fdf_data *data)
 		mlx_string_put(data->mlx, data->window, 10, 10, 0xFFFFFF, data->title);
 		temp = ft_itoa(data->mode);
 		if (temp)
-			img_draw_jointext("Mode :", temp, data);
+			img_draw_jointext((t_vect2){10, 30}, "Mode :", temp, data);
 		free(temp);
 		temp = ft_itoa(data->color);
-			img_draw_jointext("Color :", temp, data);
+		if (temp)
+			img_draw_jointext((t_vect2){10, 50}, "Color :", temp, data);
 		free(temp);
 	}
 	return (EXIT_SUCCESS);
