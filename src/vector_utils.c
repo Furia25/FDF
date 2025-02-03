@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   vector_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 19:04:33 by val               #+#    #+#             */
-/*   Updated: 2025/01/10 13:27:56 by val              ###   ########.fr       */
+/*   Updated: 2025/02/03 16:19:20 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_vect3	add(t_vect3 a, t_vect3 b)
+inline t_vect3	add(t_vect3 a, t_vect3 b)
 {
 	return ((t_vect3){a.x + b.x, a.y + b.y, a.z + b.z});
 }
 
-t_vect3	subtract(t_vect3 a, t_vect3 b)
+inline t_vect3	subtract(t_vect3 a, t_vect3 b)
 {
 	return ((t_vect3){a.x - b.x, a.y - b.y, a.z - b.z});
 }
 
-t_vect3	scale(t_vect3 v, float scalar)
+inline t_vect3	scale(t_vect3 v, float scalar)
 {
 	return ((t_vect3){v.x * scalar, v.y * scalar, v.z * scalar});
 }
 
-t_vect3	cross_product(t_vect3 a, t_vect3 b)
+inline t_vect3	cross_product(t_vect3 a, t_vect3 b)
 {
 	return ((t_vect3)
 		{
@@ -37,7 +37,7 @@ t_vect3	cross_product(t_vect3 a, t_vect3 b)
 		});
 }
 
-float	dot_product(t_vect3 a, t_vect3 b)
+inline float	dot_product(t_vect3 a, t_vect3 b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }

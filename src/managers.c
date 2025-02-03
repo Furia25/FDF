@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   managers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
-/*   Updated: 2025/01/15 21:50:46 by val              ###   ########.fr       */
+/*   Updated: 2025/02/03 16:15:12 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ void	start_managers(t_fdf_data *data)
 
 int	close_window(t_fdf_data *data)
 {
+	if (data->file_fd != -1)
+		close(data->file_fd);
 	mlx_loop_end(data->mlx);
 	ft_lstclear(&data->points, free);
 	free(data->screen_buffer);
 	free(data->z_buffer);
-	free(data->mesh);
+	if (data->mesh)
+		free(data->mesh);
 	if (data->image)
 		mlx_destroy_image(data->mlx, data->image);
 	if (data->window)
@@ -99,13 +102,12 @@ int	do_loop(t_fdf_data *data)
 		img_draw_screen(&data->image_data, data);
 		mlx_put_image_to_window(data->mlx, data->window, data->image, 0, 0);
 		mlx_string_put(data->mlx, data->window, 10, 10, 0xFFFFFF, data->title);
-		temp = ft_strjoin("Mode : ", ft_itoa(data->mode));
+		temp = ft_itoa(data->mode);
 		if (temp)
-			mlx_string_put(data->mlx, data->window, 10, 30, 0xFFFFFF, temp);
+			img_draw_jointext("Mode :", temp, data);
 		free(temp);
-		temp = ft_strjoin("Color : ", ft_itoa(data->color));
-		if (temp)
-			mlx_string_put(data->mlx, data->window, 10, 50, 0xFFFFFF, temp);
+		temp = ft_itoa(data->color);
+			img_draw_jointext("Color :", temp, data);
 		free(temp);
 	}
 	return (EXIT_SUCCESS);

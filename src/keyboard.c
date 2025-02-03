@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:53:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 19:32:06 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 15:51:12 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,6 @@ int	key_released(int keycode, t_fdf_data *data)
 		data->color -= 1;
 	}
 	data->lastkey = -1;
-	return (1);
-}
-
-int	key_manager(int lastkey, t_fdf_data *data)
-{
-	if (lastkey == XK_Escape)
-		return (close_window(data), 1);
-	if (lastkey != -1)
-	{
-		if (!movement_keys(lastkey, data))
-			data->camera->spd = CAMERA_DEFAULT_SPEED;
-		camera_keys(lastkey, data);
-	}
 	return (1);
 }
 
@@ -95,5 +82,40 @@ int	camera_keys(int keycode, t_fdf_data *data)
 		keypressed = cam_rotate(camera, 0, CAMERA_DEFAULT_SENSITIVITY, 0);
 	if (keypressed)
 		cam_update(camera);
+	return (1);
+}
+
+static int	parse_keys(int keycode, t_fdf_data *data)
+{
+	close(data->file_fd);
+	if (!try_open_file(&data->file_fd, data->file))
+		return (0);
+	if (!check_file(data->file_fd))
+		return (0);
+	if (!data->mesh || !data->points)
+		return (0);
+	free(data->mesh);
+	ft_lstclear(&data->points, free);
+	read_file(FILE_FACTOR + keycode, data);
+	data->mesh = ft_calloc(count_tri3(data->points) + 1, sizeof(t_triangle3));
+	if (!data->points || !data->mesh)
+		return (printf("test"), 0);
+	generate_mesh(data->mesh, data->points);
+	return (1);
+}
+
+int	key_manager(int lastkey, t_fdf_data *data)
+{
+	if (lastkey == XK_Escape)
+		return (close_window(data), 1);
+	if (lastkey != -1)
+	{
+		if (!movement_keys(lastkey, data))
+			data->camera->spd = CAMERA_DEFAULT_SPEED;
+		camera_keys(lastkey, data);
+		if (lastkey >= XK_1 && lastkey <= XK_9)
+			if (!parse_keys(lastkey, data))
+				return (close_window(data), 1);
+	}
 	return (1);
 }

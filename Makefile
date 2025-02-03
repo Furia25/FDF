@@ -6,7 +6,7 @@
 #    By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/13 23:20:17 by val               #+#    #+#              #
-#    Updated: 2025/01/14 14:21:17 by vdurand          ###   ########.fr        #
+#    Updated: 2025/01/29 14:41:02 by vdurand          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRC = $(shell find $(SRC_DIR) -type f -name "*.c")
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 CC = gcc
-OPTIFLAGS = -O3
+OPTIFLAGS = -Ofast
 CFLAGS = $(OPTIFLAGS) -Werror -Wextra -Wall
 MLXFLAGS = -L$(MLX_DIR) -lmlx
 FTFLAGS = -L$(LIBFT_DIR) -lft

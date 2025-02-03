@@ -13,7 +13,7 @@
 #include "fdf.h"
 #include <math.h>
 
-t_quaternion	quaternion_normalize(t_quaternion q)
+inline t_quaternion	quaternion_normalize(t_quaternion q)
 {
 	float	length;
 	float	inv_length;
@@ -30,7 +30,7 @@ t_quaternion	quaternion_normalize(t_quaternion q)
 	return (q);
 }
 
-t_quaternion	quaternion_multiply(t_quaternion q1, t_quaternion q2)
+inline t_quaternion	quaternion_multiply(t_quaternion q1, t_quaternion q2)
 {
 	t_quaternion	result;
 
@@ -41,12 +41,12 @@ t_quaternion	quaternion_multiply(t_quaternion q1, t_quaternion q2)
 	return (result);
 }
 
-t_quaternion	quaternion_conjugate(t_quaternion q)
+inline t_quaternion	quaternion_conjugate(t_quaternion q)
 {
 	return ((t_quaternion){q.w, -q.x, -q.y, -q.z});
 }
 
-t_quaternion	quaternion_from_axis_angle(t_vect3 axis, float angle)
+inline t_quaternion	quaternion_from_axis_angle(t_vect3 axis, float angle)
 {
 	float	s;
 	float	half_angle;

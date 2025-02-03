@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:47:15 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 18:44:41 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 15:57:05 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,24 +77,24 @@ void	*generate_screen(t_fdf_data *data)
 	return (data->image);
 }
 
-int	init_data(t_fdf_data *data, int fd, char *title)
+int	init_data(t_fdf_data *data)
 {
 	data->width = WINDOW_WIDTH;
 	data->height = WINDOW_HEIGHT;
 	data->mlx = mlx_init();
 	if (!data->mlx)
-		return (free(data), exit(EXIT_FAILURE), close(fd));
+		return (free(data), exit(EXIT_FAILURE), EXIT_FAILURE);
 	data->screen_buffer = ft_calloc(data->width * data->height, sizeof(t_argb));
 	data->z_buffer = ft_calloc(data->width * data->height, sizeof(float));
 	if (!data->screen_buffer || !data->z_buffer)
 		return (close_window(data));
-	data->title = ft_strjoin("Wireframe - ", title);
+	data->title = ft_strjoin("Wireframe - ", data->file);
 	data->window = mlx_new_window(data->mlx, \
 		data->width, data->height, data->title);
 	if (!data->window)
 		return (close_window(data));
 	generate_screen(data);
-	data->points = read_file(fd);
+	read_file(FILE_FACTOR, data);
 	data->mesh = ft_calloc(count_tri3(data->points) + 1, sizeof(t_triangle3));
 	if (!data->image || !data->points || !data->mesh)
 		return (close_window(data));
@@ -115,12 +115,14 @@ int	main(int argc, char **argv)
 	if (!data)
 		exit(EXIT_FAILURE);
 	if (argc != 2)
-		return (EXIT_FAILURE);
+		return (free(data), EXIT_FAILURE);
 	if (!try_open_file(&fd, argv[1]))
-		return (EXIT_FAILURE);
+		return (free(data), EXIT_FAILURE);
 	if (!check_file(fd))
 		return ((void) close(fd), EXIT_FAILURE);
-	init_data(data, fd, argv[1]);
+	data->file = argv[1];
+	data->file_fd = fd;
+	init_data(data);
 	data->camera->moved = 1;
 	data->mode = POLYGON_MODE;
 	start_managers(data);

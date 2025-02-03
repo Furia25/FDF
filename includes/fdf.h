@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/14 19:33:19 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:12:45 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ typedef struct s_fdf_data
 	int				lastkey;
 	int				mode;
 	int				color;
+	int				file_fd;
+	char			*file;
 }	t_fdf_data;
 
 enum e_draw_mode
@@ -148,13 +150,14 @@ enum e_draw_mode
 };
 
 /*	Maths Constants	*/
-# define TREEHALFS	1.5f
-# define M_PI 3.14159265358979323846
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
 /*	Windows and files Constants	*/
 # define FDF_FILE_DELIMITER	' '
 # define FILE_FACTOR	4
-# define WINDOW_WIDTH	1920
-# define WINDOW_HEIGHT	1080
+# define WINDOW_WIDTH	3840
+# define WINDOW_HEIGHT	2096
 /*	Drawing Constants	*/
 # define CIRCLE_PRECISION 100
 # define PERSPECTIVE_FACTOR	80.0f
@@ -181,9 +184,10 @@ t_vect3			normalize(t_vect3 v);
 float			normalize_angle(float angle);
 float			fast_sqrt(float number);
 //
-t_list			*read_file(int fd);
+void			read_file(float factor, t_fdf_data *data);
 int				try_open_file(int *fd, char *file_path);
 int				check_file(int fd);
+t_triangle3		*generate_mesh(t_triangle3 *mesh, t_list *lst);
 //
 void			rasterize_wireframe(t_list *lst, t_fdf_data *data);
 void			*generate_screen(t_fdf_data *data);
@@ -191,8 +195,9 @@ void			rasterize_tri(t_fdf_data *data);
 void			rasterize_points(t_list *lst, t_fdf_data *data);
 //
 int				frustum(t_triangle2 tri, t_fdf_data *data);
-void			img_rasterize_segtri(t_triangle2 tri, t_argb c, t_fdf_data *data);
+void			img_rasterize_segtri(t_triangle2 tri, t_argb c, t_fdf_data *d);
 void			img_rasterize_triangle(t_triangle2 t, t_argb c, t_fdf_data *d);
+void			img_draw_jointext(char *str1, char *str2, t_fdf_data *data);
 void			img_draw_screen(t_image_data *img, t_fdf_data *data);
 void			img_draw_pixel(t_argb argb, int x, int y, t_image_data *img);
 void			img_set_pixel(t_argb c, int x, int y, t_fdf_data *data);

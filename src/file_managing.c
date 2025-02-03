@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_managing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: val <val@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:57:04 by vdurand           #+#    #+#             */
-/*   Updated: 2025/01/15 21:39:35 by val              ###   ########.fr       */
+/*   Updated: 2025/02/03 15:40:08 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	free_chartab(char **tab)
 	free(tab);
 }
 
-static t_vect3	*parse_line(char *line, int y)
+static t_vect3	*parse_line(char *line, int y, float factor)
 {
 	char		**words;
 	t_vect3		*result;
@@ -62,7 +62,7 @@ static t_vect3	*parse_line(char *line, int y)
 	while (words[index])
 	{
 		result[index] = (t_vect3){
-			(float)y, -(((float) ft_atoi(words[index])) / FILE_FACTOR), -index};
+			(float)y, -(((float) ft_atoi(words[index])) / factor), -index};
 		index++;
 	}
 	result[index] = (t_vect3){-1, -1, -1};
@@ -70,7 +70,7 @@ static t_vect3	*parse_line(char *line, int y)
 	return (free(line), result);
 }
 
-t_list	*read_file(int fd)
+void	read_file(float factor, t_fdf_data *data)
 {
 	t_list		*current;
 	t_list		*temp;
@@ -80,7 +80,7 @@ t_list	*read_file(int fd)
 	ft_printf("\033[1;34mGENERATING WIREFRAME...\033[0m\n");
 	current = NULL;
 	z = 0;
-	values = parse_line(get_next_line(fd), z);
+	values = parse_line(get_next_line(data->file_fd), z, factor);
 	while (values)
 	{
 		temp = ft_lstnew(values);
@@ -88,12 +88,12 @@ t_list	*read_file(int fd)
 		{
 			ft_lstclear(&current, free);
 			free(values);
-			return (NULL);
+			return ;
 		}
 		ft_lstadd_back(&current, temp);
 		z++;
-		values = parse_line(get_next_line(fd), z);
+		values = parse_line(get_next_line(data->file_fd), z, factor);
 	}
 	ft_printf("\033[1;92mWIREFRAME GENERATED!\033[0m\n");
-	return (current);
+	data->points = current;
 }
