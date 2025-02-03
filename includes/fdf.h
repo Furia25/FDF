@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:36:46 by vdurand           #+#    #+#             */
-/*   Updated: 2025/02/03 17:49:59 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:04:22 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ enum e_draw_mode
 # endif
 /*	Windows and files Constants	*/
 # define FDF_FILE_DELIMITER	' '
+# define FDF_HELP_TEXT	"W A S D : Movement | Mouse or arrow : Camera Movement |\
+	 1-9 Change Height Factor | +/- Next/Previous Color"
 # define FILE_FACTOR	4
 # define WINDOW_WIDTH	3840
 # define WINDOW_HEIGHT	2096
