@@ -6,7 +6,7 @@
 /*   By: vdurand <vdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 18:13:14 by val               #+#    #+#             */
-/*   Updated: 2025/02/03 18:13:40 by vdurand          ###   ########.fr       */
+/*   Updated: 2025/02/06 14:57:41 by vdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ int	do_loop(t_fdf_data *data)
 	if (temp)
 		img_draw_jointext((t_vect2){10, 50}, "Color : ", temp, data);
 	mlx_string_put(data->mlx, data->window, 10, \
-		data->height-30, 0xFFFFFF, FDF_HELP_TEXT);
+		data->height - 30, 0xFFFFFF, FDF_HELP_TEXT);
 	return (free(temp), EXIT_SUCCESS);
 }
